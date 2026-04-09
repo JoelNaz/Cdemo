@@ -90,7 +90,7 @@ export default function S05Territory() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={l2Territory} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
                 <CartesianGrid {...gridProps} />
-                <XAxis dataKey="beat_name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
+                <XAxis dataKey="beat_id" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
                 <YAxis {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Compliance']} />
                 <ReferenceLine y={84} stroke="var(--success)" strokeDasharray="4 3" label={{ value: 'Target 84%', position: 'insideTopRight', fill: 'var(--success)', fontSize: 10 }} />

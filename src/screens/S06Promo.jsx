@@ -84,7 +84,7 @@ export default function S06Promo() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={l2Promo} margin={{ top: 24, right: 12, left: -10, bottom: 0 }}>
                 <CartesianGrid {...gridProps} />
-                <XAxis dataKey="scheme_name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
+                <XAxis dataKey="name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
                 <YAxis domain={[0, 100]} {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Participation']} />
                 <ReferenceLine y={60} stroke="var(--success)" strokeDasharray="4 3" label={{ value: 'Target 60%', position: 'insideTopRight', fill: 'var(--success)', fontSize: 10 }} />
