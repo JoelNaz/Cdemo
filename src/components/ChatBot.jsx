@@ -315,6 +315,7 @@ export default function ChatBot() {
   const [screenKey, setScreenKey] = useState(currentScreen);
   const [expanded, setExpanded] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
+  const navigatingViaOption = useRef(false);
   const [inputValue, setInputValue] = useState('');
   const [findingDrillContext, setFindingDrillContext] = useState(null);
   const messagesEndRef = useRef(null);
@@ -348,6 +349,7 @@ export default function ChatBot() {
   useEffect(() => {
     if (!chatOpen) return;
     if (findingDrillContext) return;
+    if (navigatingViaOption.current) return;
     const tree = questionnaireTree[screenKey];
     if (!tree) return;
     const node = tree[nodeKey] || tree['entry'];
@@ -369,6 +371,7 @@ export default function ChatBot() {
     if (option.navigateTo) {
       const screen = screenDefinitions[option.navigateTo];
       if (screen) {
+        navigatingViaOption.current = true;
         setIsNavigating(true);
         setTimeout(() => {
           navigate(screen.path);
@@ -381,7 +384,10 @@ export default function ChatBot() {
             setTimeout(() => {
               addChatMessage({ role: 'bot', content: nextNode.message, showChart: nextNode.showChart, navigatedTo: option.navigateTo });
               setNodeKey(nextNodeKey);
+              navigatingViaOption.current = false;
             }, 400);
+          } else {
+            navigatingViaOption.current = false;
           }
         }, 200);
         return;
