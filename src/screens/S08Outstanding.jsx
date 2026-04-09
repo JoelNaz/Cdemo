@@ -42,7 +42,7 @@ const tableColumns = [
 
 
 export default function S08Outstanding() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-08'); }, []);
 
   return (
@@ -53,7 +53,6 @@ export default function S08Outstanding() {
           <h2 className="screen-title">Outstanding Health</h2>
           <div className="screen-subtitle">Outstanding aging, collection rate, distributor credit · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />

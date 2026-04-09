@@ -59,7 +59,7 @@ function ActivePieShape(props) {
 }
 
 export default function S04Channel() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   const [activeIndex, setActiveIndex] = useState(0);
   const onPieEnter = useCallback((_, index) => setActiveIndex(index), []);
   useEffect(() => { trackScreenVisit('S-04'); }, []);
@@ -72,7 +72,6 @@ export default function S04Channel() {
           <h2 className="screen-title">Channel Mix</h2>
           <div className="screen-subtitle">GT/MT/QC/ecomm share, structural shift detection · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />

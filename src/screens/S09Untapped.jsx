@@ -43,7 +43,7 @@ const tableColumns = [
 
 
 export default function S09Untapped() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-09'); }, []);
 
   return (
@@ -54,7 +54,6 @@ export default function S09Untapped() {
           <h2 className="screen-title">Untapped Potential</h2>
           <div className="screen-subtitle">Whitespace towns, under-indexed markets, expansion targeting · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />

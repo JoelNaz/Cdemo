@@ -38,7 +38,7 @@ const tableColumns = [
 
 
 export default function S06Promo() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-06'); }, []);
 
   return (
@@ -49,7 +49,6 @@ export default function S06Promo() {
           <h2 className="screen-title">Promo Health</h2>
           <div className="screen-subtitle">Scheme performance, uplift vs target, ROI · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />

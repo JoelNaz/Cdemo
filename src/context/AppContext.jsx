@@ -9,7 +9,7 @@ export function AppProvider({ children }) {
   const [chatOpen, setChatOpen] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('S-00');
   const [conversationCharts, setConversationCharts] = useState([]);
-  const [theme, setTheme] = useState(() => localStorage.getItem('clarynt-theme') || 'dark');
+  const [theme, setTheme] = useState(() => localStorage.getItem('clarynt-theme') || 'light');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

@@ -40,7 +40,7 @@ const tableColumns = [
 
 
 export default function S02Extraction() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-02'); }, []);
 
   return (
@@ -51,7 +51,6 @@ export default function S02Extraction() {
           <h2 className="screen-title">Extraction Health</h2>
           <div className="screen-subtitle">WD%, WSP/outlet, extraction vs benchmark · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />

@@ -25,7 +25,7 @@ const warningFindings = driftFindings.filter(f => f.severity === 'warning');
 const infoFindings = driftFindings.filter(f => f.severity === 'info' || f.category === 'B');
 
 export default function S00Landing() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-00'); }, []);
 
   return (
@@ -36,7 +36,6 @@ export default function S00Landing() {
           <h2 className="screen-title">Growth Command Centre</h2>
           <div className="screen-subtitle">North-2 Region · March 2026 · MTD 58% complete</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />
