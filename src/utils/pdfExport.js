@@ -1,5 +1,4 @@
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { screenDefinitions } from '../data/mockData';
 
 // ── Design tokens mirroring the UI ──────────────────────────────────────────
@@ -24,8 +23,12 @@ const C = {
 function rgb(arr)  { return arr; }
 function hex(h)    { const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return [r,g,b]; }
 
+function stripEmoji(text) {
+  return (text || '').replace(/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{2300}-\u{23FF}]|[\u{2B00}-\u{2BFF}]|[\u{FE00}-\u{FEFF}]|[\u{1F900}-\u{1F9FF}]|✅|❌|⚠️|🔴|🟡|🟢|🔵|⭐/gu, '').trim();
+}
+
 function stripInline(text) {
-  return (text || '')
+  return stripEmoji((text || '')
     .replace(/<strong>(.*?)<\/strong>/g, '$1')
     .replace(/<em>(.*?)<\/em>/g, '$1')
     .replace(/<code[^>]*>(.*?)<\/code>/g, '$1')
@@ -36,7 +39,7 @@ function stripInline(text) {
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
-    .trim();
+    .trim());
 }
 
 // Parse raw markdown into structured blocks
@@ -98,15 +101,6 @@ function estimateBlocksHeight(pdf, blocks, contentW) {
   return h + 10; // inner padding
 }
 
-async function captureEl(selector, bg = '#ffffff') {
-  const el = document.querySelector(selector);
-  if (!el) return null;
-  try {
-    const canvas = await html2canvas(el, { backgroundColor: bg, scale: 2, logging: false, useCORS: true });
-    return { dataUrl: canvas.toDataURL('image/png'), w: canvas.width, h: canvas.height };
-  } catch { return null; }
-}
-
 export async function generatePDF(chatHistory, currentScreenId) {
   const pdf  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const PW   = pdf.internal.pageSize.getWidth();
@@ -153,58 +147,6 @@ export async function generatePDF(chatHistory, currentScreenId) {
   pdf.text(`North-2 · RSM · ${dateStr}`, PW - M, 25, { align: 'right' });
 
   y = 42;
-
-  // ── SCREEN SNAPSHOT ────────────────────────────────────────────────────────
-  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-  const snapBg = isDark ? '#0f1117' : '#f4f5f7';
-  const snap = await captureEl('.screen', snapBg);
-  if (snap) {
-    // Section label
-    pdf.setFillColor(...C.accent);
-    pdf.rect(M, y, 2, 5, 'F');
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(8);
-    pdf.setTextColor(50, 50, 50);
-    pdf.text('SCREEN SNAPSHOT', M + 5, y + 3.6);
-    y += 9;
-
-    const imgH = Math.min((snap.h / snap.w) * CW, 120);
-    // subtle border around image
-    pdf.setDrawColor(220, 220, 220);
-    pdf.setLineWidth(0.3);
-    pdf.rect(M, y, CW, imgH, 'S');
-    pdf.addImage(snap.dataUrl, 'PNG', M, y, CW, imgH);
-    y += imgH + 10;
-  }
-
-  // ── CHARTS ─────────────────────────────────────────────────────────────────
-  const twoColDivs = document.querySelectorAll('.two-col');
-  if (twoColDivs.length > 0) {
-    if (y > PH - 70) { pdf.addPage(); y = M; }
-
-    pdf.setFillColor(...C.accent);
-    pdf.rect(M, y, 2, 5, 'F');
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(8);
-    pdf.setTextColor(50, 50, 50);
-    pdf.text('CHARTS & VISUALISATIONS', M + 5, y + 3.6);
-    y += 9;
-
-    for (let i = 0; i < Math.min(twoColDivs.length, 2); i++) {
-      const el = twoColDivs[i];
-      try {
-        const canvas = await html2canvas(el, { backgroundColor: snapBg, scale: 1.8, logging: false, useCORS: true });
-        const imgH = Math.min((canvas.height / canvas.width) * CW, 80);
-        if (y + imgH > PH - 20) { pdf.addPage(); y = M; }
-        pdf.setDrawColor(220, 220, 220);
-        pdf.setLineWidth(0.3);
-        pdf.rect(M, y, CW, imgH, 'S');
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', M, y, CW, imgH);
-        y += imgH + 6;
-      } catch {}
-    }
-    y += 4;
-  }
 
   // ── AI ANALYSIS TRANSCRIPT ────────────────────────────────────────────────
   if (y > PH - 50) { pdf.addPage(); y = M; }
