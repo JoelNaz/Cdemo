@@ -1,14 +1,23 @@
+import { useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Target, TrendingUp, GitBranch, PieChart,
   Map, Zap, BarChart3, Wallet, Radar, Sun, Moon,
 } from 'lucide-react';
-import { screenDefinitions } from '../data/mockData';
+import { screenDefinitions, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 
 const iconMap = {
   LayoutDashboard, Target, TrendingUp, GitBranch, PieChart, Map, Zap, BarChart3, Wallet, Radar,
 };
+
+const findingsBadge = driftFindings.reduce((acc, f) => {
+  const id = f.target_screen;
+  if (!acc[id]) acc[id] = { critical: 0, warning: 0 };
+  if (f.severity === 'critical') acc[id].critical++;
+  else if (f.severity === 'warning') acc[id].warning++;
+  return acc;
+}, {});
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -65,7 +74,18 @@ export default function Sidebar() {
                 {s.id}
               </span>
               {Icon && <Icon className="w-[18px] h-[18px] flex-shrink-0" />}
-              <span>{s.name}</span>
+              <span className="flex-1">{s.name}</span>
+              {findingsBadge[s.id] && (
+                <span
+                  className="text-[9px] font-extrabold min-w-[17px] h-[17px] flex items-center justify-center rounded-full px-1 flex-shrink-0"
+                  style={{
+                    background: findingsBadge[s.id].critical > 0 ? 'var(--critical-bg)' : 'var(--warning-bg)',
+                    color: findingsBadge[s.id].critical > 0 ? 'var(--critical)' : 'var(--warning)',
+                  }}
+                >
+                  {findingsBadge[s.id].critical + findingsBadge[s.id].warning}
+                </span>
+              )}
             </div>
           );
         })}

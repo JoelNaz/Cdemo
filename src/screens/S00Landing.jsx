@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import { kpiSummary, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const mtdData = [
   { month: 'Oct', value: 9.2 }, { month: 'Nov', value: 8.8 }, { month: 'Dec', value: 8.1 },
@@ -22,8 +23,6 @@ const kpis = [
 const criticalFindings = driftFindings.filter(f => f.severity === 'critical');
 const warningFindings = driftFindings.filter(f => f.severity === 'warning');
 const infoFindings = driftFindings.filter(f => f.severity === 'info' || f.category === 'B');
-
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S00Landing() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -55,15 +54,17 @@ export default function S00Landing() {
       <div className="two-col">
         <div>
           <div className="section-label">Revenue Trend — 6 Months</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={mtdData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={mtdData} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
+                <defs><GradFill id="gradRevenue" color="var(--accent)" startOpacity={0.28} /></defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis {...yAxisProps} tickFormatter={v => `₹${v}Cr`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`₹${v}Cr`, 'Revenue']} />
-                <ReferenceLine y={8.5} stroke="var(--border-light)" strokeDasharray="3 3" label={{ value: 'SPLY avg', position: 'right', fill: 'var(--text-muted)', fontSize: 10 }} />
-                <Line type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2} dot={{ fill: 'var(--accent)', r: 3 }} />
-              </LineChart>
+                <ReferenceLine y={8.5} stroke="var(--border-light)" strokeDasharray="4 3" label={{ value: 'SPLY avg', position: 'insideTopRight', fill: 'var(--text-muted)', fontSize: 10 }} />
+                <Area type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2.5} fill="url(#gradRevenue)" dot={{ fill: 'var(--accent)', r: 3.5, strokeWidth: 0 }} activeDot={activeDot('var(--accent)')} name="Revenue" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
