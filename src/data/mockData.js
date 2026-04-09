@@ -370,3 +370,37 @@ export const screenDefinitions = {
   'S-08': { id: 'S-08', name: 'Outstanding Health', description: 'Outstanding aging, collection rate', icon: 'Wallet', path: '/outstanding' },
   'S-09': { id: 'S-09', name: 'Untapped Potential', description: 'Whitespace, under-penetrated towns, expansion', icon: 'Radar', path: '/untapped' },
 };
+
+// --- PROMO OUTLET DRILL-DOWN (SCH-003 · Varanasi · FLP) ---
+export const promoOutlets = [
+  { outlet_id: 'OL-VNS-001', name: 'Shiva General Store',      district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-01', manager: 'Rahul Singh', salesperson: 'Amit Kumar',   last_purchase: '2026-01-12', participated: false, eligible: true,  reason: 'Unaware of scheme' },
+  { outlet_id: 'OL-VNS-002', name: 'Ram Kirana & Co.',          district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-01', manager: 'Rahul Singh', salesperson: 'Amit Kumar',   last_purchase: '2026-02-03', participated: true,  eligible: true,  reason: null },
+  { outlet_id: 'OL-VNS-003', name: 'Gupta Provisions',          district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-02', manager: 'Rahul Singh', salesperson: 'Sanjay Yadav', last_purchase: '2025-12-20', participated: false, eligible: true,  reason: 'Low visit frequency' },
+  { outlet_id: 'OL-VNS-004', name: 'Hanuman Stores',            district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-02', manager: 'Rahul Singh', salesperson: 'Sanjay Yadav', last_purchase: '2026-01-28', participated: false, eligible: true,  reason: 'Eligibility criteria mismatch' },
+  { outlet_id: 'OL-VNS-005', name: 'New Rajasthan Mart',        district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-02', manager: 'Rahul Singh', salesperson: 'Sanjay Yadav', last_purchase: '2026-02-14', participated: true,  eligible: true,  reason: null },
+  { outlet_id: 'OL-VNS-006', name: 'Durga Trading Co.',         district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-03', manager: 'Rahul Singh', salesperson: 'Pradeep Tiwari', last_purchase: '2025-11-30', participated: false, eligible: true,  reason: 'Outlet closed on visit day' },
+  { outlet_id: 'OL-VNS-007', name: 'Sai Baba General Store',    district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-03', manager: 'Rahul Singh', salesperson: 'Pradeep Tiwari', last_purchase: '2026-01-05', participated: false, eligible: true,  reason: 'Unaware of scheme' },
+  { outlet_id: 'OL-VNS-008', name: 'Laxmi Provision Store',     district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-03', manager: 'Rahul Singh', salesperson: 'Pradeep Tiwari', last_purchase: '2026-02-18', participated: true,  eligible: true,  reason: null },
+  { outlet_id: 'OL-VNS-009', name: 'Krishna Medicos & Gen.',    district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-04', manager: 'Rahul Singh', salesperson: 'Deepak Mishra',  last_purchase: '2026-01-19', participated: false, eligible: true,  reason: 'Distributor stock shortage' },
+  { outlet_id: 'OL-VNS-010', name: 'Patel Super Store',         district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-04', manager: 'Rahul Singh', salesperson: 'Deepak Mishra',  last_purchase: '2025-12-10', participated: false, eligible: true,  reason: 'Low visit frequency' },
+  { outlet_id: 'OL-VNS-011', name: 'Vinayak Kirana',            district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-04', manager: 'Rahul Singh', salesperson: 'Deepak Mishra',  last_purchase: '2026-02-22', participated: true,  eligible: true,  reason: null },
+  { outlet_id: 'OL-VNS-012', name: 'Shakti General Store',      district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-05', manager: 'Rahul Singh', salesperson: 'Rohit Verma',    last_purchase: '2026-01-07', participated: false, eligible: true,  reason: 'Unaware of scheme' },
+  { outlet_id: 'OL-VNS-013', name: 'Mahavir Traders',           district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-05', manager: 'Rahul Singh', salesperson: 'Rohit Verma',    last_purchase: '2025-11-15', participated: false, eligible: true,  reason: 'Inactive > 60 days' },
+  { outlet_id: 'OL-VNS-014', name: 'Ganesh Provision Center',   district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-05', manager: 'Rahul Singh', salesperson: 'Rohit Verma',    last_purchase: '2026-02-09', participated: false, eligible: true,  reason: 'Eligibility criteria mismatch' },
+  { outlet_id: 'OL-VNS-015', name: 'Om Sai Kirana',             district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-06', manager: 'Rahul Singh', salesperson: 'Suresh Pandey',  last_purchase: '2026-01-30', participated: true,  eligible: true,  reason: null },
+  { outlet_id: 'OL-VNS-016', name: 'Saraswati Super Store',     district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-06', manager: 'Rahul Singh', salesperson: 'Suresh Pandey',  last_purchase: '2025-12-28', participated: false, eligible: true,  reason: 'Low visit frequency' },
+  { outlet_id: 'OL-VNS-017', name: 'Balaji Provision Mart',     district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-06', manager: 'Rahul Singh', salesperson: 'Suresh Pandey',  last_purchase: '2026-02-01', participated: false, eligible: true,  reason: 'Outlet closed on visit day' },
+  { outlet_id: 'OL-VNS-018', name: 'Triveni General Store',     district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-07', manager: 'Rahul Singh', salesperson: 'Nitin Gupta',    last_purchase: '2026-01-22', participated: false, eligible: true,  reason: 'Unaware of scheme' },
+  { outlet_id: 'OL-VNS-019', name: 'Aggarwal Bros. Kirana',     district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-07', manager: 'Rahul Singh', salesperson: 'Nitin Gupta',    last_purchase: '2026-02-27', participated: true,  eligible: true,  reason: null },
+  { outlet_id: 'OL-VNS-020', name: 'Sardar Ji General Store',   district: 'Varanasi', town_class: 'FLP', beat: 'BT-VNS-07', manager: 'Rahul Singh', salesperson: 'Nitin Gupta',    last_purchase: '2025-12-05', participated: false, eligible: true,  reason: 'Distributor stock shortage' },
+];
+
+export const promoSalesteam = [
+  { id: 'SE-01', name: 'Amit Kumar',    beat: 'BT-VNS-01', outlets_assigned: 42, outlets_eligible: 38, participated: 8,  participation_pct: 21, last_visit: '2026-03-28', visit_compliance: 61 },
+  { id: 'SE-02', name: 'Sanjay Yadav',  beat: 'BT-VNS-02', outlets_assigned: 38, outlets_eligible: 35, participated: 9,  participation_pct: 26, last_visit: '2026-03-27', visit_compliance: 58 },
+  { id: 'SE-03', name: 'Pradeep Tiwari',beat: 'BT-VNS-03', outlets_assigned: 40, outlets_eligible: 36, participated: 11, participation_pct: 31, last_visit: '2026-03-29', visit_compliance: 64 },
+  { id: 'SE-04', name: 'Deepak Mishra', beat: 'BT-VNS-04', outlets_assigned: 35, outlets_eligible: 32, participated: 6,  participation_pct: 19, last_visit: '2026-03-26', visit_compliance: 55 },
+  { id: 'SE-05', name: 'Rohit Verma',   beat: 'BT-VNS-05', outlets_assigned: 44, outlets_eligible: 40, participated: 10, participation_pct: 25, last_visit: '2026-03-28', visit_compliance: 59 },
+  { id: 'SE-06', name: 'Suresh Pandey', beat: 'BT-VNS-06', outlets_assigned: 39, outlets_eligible: 35, participated: 14, participation_pct: 40, last_visit: '2026-03-30', visit_compliance: 72 },
+  { id: 'SE-07', name: 'Nitin Gupta',   beat: 'BT-VNS-07', outlets_assigned: 36, outlets_eligible: 33, participated: 10, participation_pct: 30, last_visit: '2026-03-27', visit_compliance: 63 },
+];

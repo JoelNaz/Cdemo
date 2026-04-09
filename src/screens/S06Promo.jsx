@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine, CartesianGrid, LabelList } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
+import ContextMenu from '../components/ContextMenu';
 import { l2Promo, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, chartCardClass, chartCardStyle } from '../utils/chartUtils';
@@ -38,8 +39,15 @@ const tableColumns = [
 
 
 export default function S06Promo() {
-  const { trackScreenVisit } = useApp();
+  const { trackScreenVisit, openChatWithFinding } = useApp();
+  const [ctxMenu, setCtxMenu] = useState(null);
   useEffect(() => { trackScreenVisit('S-06'); }, []);
+
+  const promoFinding = relevantFindings[0];
+
+  const handleMetricRightClick = (kpi, e) => {
+    setCtxMenu({ x: e.clientX, y: e.clientY, kpi });
+  };
 
   return (
     <div className="screen">
@@ -51,12 +59,24 @@ export default function S06Promo() {
         </div>
       </div>
 
-      <KpiStrip kpis={kpis} />
+      <KpiStrip kpis={kpis} onMetricRightClick={handleMetricRightClick} />
+
+      {ctxMenu && (
+        <ContextMenu
+          x={ctxMenu.x}
+          y={ctxMenu.y}
+          label={ctxMenu.kpi.label}
+          onClose={() => setCtxMenu(null)}
+          onDrillDown={() => {
+            if (promoFinding) openChatWithFinding({ ...promoFinding, focusMetric: ctxMenu.kpi.label });
+          }}
+        />
+      )}
 
       {relevantFindings.length > 0 && (
         <div className="mb-5">
           <div className="section-label">Active Findings</div>
-          {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
+          {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} showAIDrillDown />)}
         </div>
       )}
 

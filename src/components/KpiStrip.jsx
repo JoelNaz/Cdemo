@@ -1,4 +1,4 @@
-export default function KpiStrip({ kpis }) {
+export default function KpiStrip({ kpis, onMetricRightClick }) {
   return (
     <div
       className="grid gap-2.5 mb-[22px]"
@@ -7,8 +7,9 @@ export default function KpiStrip({ kpis }) {
       {kpis.map((kpi, i) => (
         <div
           key={i}
-          className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4 transition-[border-color,box-shadow] hover:border-[var(--border-light)]"
-          style={{ boxShadow: 'var(--card-shadow)' }}
+          className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4 transition-[border-color,box-shadow] hover:border-[var(--border-light)] select-none"
+          style={{ boxShadow: 'var(--card-shadow)', cursor: onMetricRightClick ? 'context-menu' : 'default' }}
+          onContextMenu={onMetricRightClick ? (e) => { e.preventDefault(); onMetricRightClick(kpi, e); } : undefined}
         >
           <div className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-[0.9px] mb-2">
             {kpi.label}

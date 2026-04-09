@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { screenDefinitions } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 
@@ -18,9 +18,9 @@ const severityStyles = {
   },
 };
 
-export default function FindingCard({ finding, showDrill = false }) {
+export default function FindingCard({ finding, showDrill = false, showAIDrillDown = false }) {
   const navigate = useNavigate();
-  const { trackScreenVisit } = useApp();
+  const { trackScreenVisit, openChatWithFinding } = useApp();
   const screen = screenDefinitions[finding.target_screen];
   const sev = severityStyles[finding.severity] || severityStyles.info;
 
@@ -81,11 +81,29 @@ export default function FindingCard({ finding, showDrill = false }) {
         </span>
       </div>
 
-      {showDrill && screen && (
-        <div className="inline-flex items-center gap-1 mt-[9px] px-2.5 py-1 bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-md text-[10.5px] font-semibold text-[var(--text-secondary)] cursor-pointer transition-[border-color,color,background] hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[var(--accent-light)] tracking-[0.1px]">
-          Drill down: {screen.name} <ArrowRight size={12} />
-        </div>
-      )}
+      <div className="flex items-center gap-2 flex-wrap">
+        {showDrill && screen && (
+          <div className="inline-flex items-center gap-1 mt-[9px] px-2.5 py-1 bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-md text-[10.5px] font-semibold text-[var(--text-secondary)] cursor-pointer transition-[border-color,color,background] hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[var(--accent-light)] tracking-[0.1px]">
+            Drill down: {screen.name} <ArrowRight size={12} />
+          </div>
+        )}
+        {showAIDrillDown && (
+          <button
+            onClick={(e) => { e.stopPropagation(); openChatWithFinding(finding); }}
+            className="inline-flex items-center gap-1.5 mt-[9px] px-2.5 py-1 rounded-md text-[10.5px] font-semibold cursor-pointer transition-all tracking-[0.1px] border"
+            style={{
+              background: 'linear-gradient(135deg, rgba(251,191,36,0.12) 0%, rgba(217,119,6,0.08) 100%)',
+              borderColor: 'rgba(251,191,36,0.35)',
+              color: 'var(--accent)',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(251,191,36,0.22) 0%, rgba(217,119,6,0.16) 100%)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(251,191,36,0.12) 0%, rgba(217,119,6,0.08) 100%)'; e.currentTarget.style.borderColor = 'rgba(251,191,36,0.35)'; }}
+          >
+            <Sparkles size={11} />
+            AI Drill Down
+          </button>
+        )}
+      </div>
     </div>
   );
 }

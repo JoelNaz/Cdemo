@@ -7,6 +7,7 @@ export function AppProvider({ children }) {
   const [user] = useState(currentUser);
   const [chatHistory, setChatHistory] = useState([]);
   const [chatOpen, setChatOpen] = useState(false);
+  const [activeFinding, setActiveFinding] = useState(null);
   const [currentScreen, setCurrentScreen] = useState('S-00');
   const [conversationCharts, setConversationCharts] = useState([]);
   const [theme, setTheme] = useState(() => localStorage.getItem('clarynt-theme') || 'light');
@@ -37,11 +38,18 @@ export function AppProvider({ children }) {
     setConversationCharts([]);
   }, []);
 
+  const openChatWithFinding = useCallback((finding) => {
+    setChatHistory([]);
+    setActiveFinding(finding);
+    setChatOpen(true);
+  }, []);
+
   return (
     <AppContext.Provider value={{
       user,
       chatHistory, addChatMessage, resetChat,
       chatOpen, setChatOpen,
+      activeFinding, setActiveFinding, openChatWithFinding,
       currentScreen, trackScreenVisit,
       conversationCharts, addConversationChart,
       theme, toggleTheme,
