@@ -47,7 +47,7 @@ const highlightRules = {
 
 
 export default function S01Reach() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-01'); }, []);
 
   return (
@@ -58,7 +58,6 @@ export default function S01Reach() {
           <h2 className="screen-title">Reach Health</h2>
           <div className="screen-subtitle">ND%, GEO ECO, outlet funnel, churn analysis · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />

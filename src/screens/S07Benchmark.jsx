@@ -44,7 +44,7 @@ const tableColumns = [
 
 
 export default function S07Benchmark() {
-  const { trackScreenVisit, setChatOpen } = useApp();
+  const { trackScreenVisit } = useApp();
   useEffect(() => { trackScreenVisit('S-07'); }, []);
 
   return (
@@ -55,7 +55,6 @@ export default function S07Benchmark() {
           <h2 className="screen-title">Benchmark</h2>
           <div className="screen-subtitle">Client vs cohort gaps, percentile rank, trend · North-2 · March 2026</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />
