@@ -339,12 +339,11 @@ export default function ChatBot() {
             onClick={() => handleScreenSwitch(s.id)}
             className="whitespace-nowrap cursor-pointer transition-all text-[9px] font-bold tracking-[0.4px] px-2.5 py-1 rounded-md"
             style={screenKey === s.id
-              ? { background: 'var(--accent)', color: '#000' }
-              : { background: 'transparent', color: 'var(--text-muted)' }
+              ? { background: 'var(--accent)', color: '#000', fontFamily: "'DM Mono', monospace" }
+              : { background: 'transparent', color: 'var(--text-muted)', fontFamily: "'DM Mono', monospace" }
             }
             onMouseEnter={e => { if (screenKey !== s.id) e.currentTarget.style.color = 'var(--text-primary)'; }}
             onMouseLeave={e => { if (screenKey !== s.id) e.currentTarget.style.color = 'var(--text-muted)'; }}
-            {...{ style: screenKey === s.id ? { background: 'var(--accent)', color: '#000', fontFamily: "'DM Mono', monospace" } : { background: 'transparent', color: 'var(--text-muted)', fontFamily: "'DM Mono', monospace" } }}
           >
             {s.id}
           </button>

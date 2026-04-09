@@ -8,7 +8,6 @@ export function AppProvider({ children }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [chatOpen, setChatOpen] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('S-00');
-  const [visitedScreens, setVisitedScreens] = useState(['S-00']);
   const [conversationCharts, setConversationCharts] = useState([]);
   const [theme, setTheme] = useState(() => localStorage.getItem('clarynt-theme') || 'dark');
 
@@ -27,7 +26,6 @@ export function AppProvider({ children }) {
 
   const trackScreenVisit = useCallback((screenId) => {
     setCurrentScreen(screenId);
-    setVisitedScreens(prev => prev.includes(screenId) ? prev : [...prev, screenId]);
   }, []);
 
   const addConversationChart = useCallback((chart) => {
@@ -45,7 +43,6 @@ export function AppProvider({ children }) {
       chatHistory, addChatMessage, resetChat,
       chatOpen, setChatOpen,
       currentScreen, trackScreenVisit,
-      visitedScreens,
       conversationCharts, addConversationChart,
       theme, toggleTheme,
     }}>
