@@ -1,5 +1,8 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Target, TrendingUp, GitBranch, PieChart, Map, Zap, BarChart3, Wallet, Radar, Sun, Moon } from 'lucide-react';
+import {
+  LayoutDashboard, Target, TrendingUp, GitBranch, PieChart,
+  Map, Zap, BarChart3, Wallet, Radar, Sun, Moon,
+} from 'lucide-react';
 import { screenDefinitions } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 
@@ -20,33 +23,62 @@ export default function Sidebar() {
   };
 
   return (
-    <nav className="sidebar">
-      <div className="sidebar-logo">
-        <h1>CLARY<span>NT</span></h1>
+    <nav
+      className="w-[260px] bg-[var(--bg-secondary)] border-r border-[var(--border)] flex flex-col fixed top-0 left-0 bottom-0 z-[100]"
+      style={{ boxShadow: 'var(--sidebar-shadow)' }}
+    >
+      {/* Logo */}
+      <div className="px-5 pt-[18px] pb-[14px] border-b border-[var(--border)] flex items-center">
+        <h1 className="text-[16px] font-extrabold tracking-[3px] text-[var(--text-primary)] uppercase">
+          CLARY<span className="text-[var(--accent)]">NT</span>
+        </h1>
       </div>
-      <div className="sidebar-subtitle">Command Centre</div>
-      <div className="sidebar-nav">
+
+      {/* Subtitle */}
+      <div className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-[2.5px] px-5 pt-[10px] pb-[5px]">
+        Command Centre
+      </div>
+
+      {/* Nav */}
+      <div className="flex-1 overflow-y-auto py-1 px-2">
         {screens.map(s => {
           const Icon = iconMap[s.icon];
           const isActive = location.pathname === s.path;
           return (
             <div
               key={s.id}
-              className={`nav-item ${isActive ? 'active' : ''}`}
               onClick={() => handleNav(s)}
+              className={[
+                'relative flex items-center gap-2.5 px-3 py-[9px] rounded-lg cursor-pointer transition-colors mb-px text-[12.5px]',
+                isActive
+                  ? 'bg-[var(--accent-light)] text-[var(--accent)] font-semibold'
+                  : 'text-[var(--text-secondary)] font-medium hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]',
+              ].join(' ')}
             >
-              <span className="nav-id">{s.id}</span>
-              {Icon && <Icon className="nav-icon" />}
+              {isActive && (
+                <span className="absolute left-0 top-[7px] bottom-[7px] w-[2.5px] rounded-sm bg-[var(--accent)]" />
+              )}
+              <span
+                className="text-[9px] font-bold text-[var(--text-muted)] min-w-[28px]"
+                style={{ fontFamily: "'DM Mono', monospace" }}
+              >
+                {s.id}
+              </span>
+              {Icon && <Icon className="w-[18px] h-[18px] flex-shrink-0" />}
               <span>{s.name}</span>
             </div>
           );
         })}
       </div>
-      <div className="sidebar-user">
-        <div className="user-avatar">{user.name.split(' ').map(n => n[0]).join('')}</div>
-        <div className="user-info">
-          <div className="user-name">{user.name}</div>
-          <div className="user-role">{user.role} &middot; {user.region}</div>
+
+      {/* User footer */}
+      <div className="px-3.5 py-3 border-t border-[var(--border)] flex items-center gap-2.5">
+        <div className="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center font-extrabold text-[12px] text-black flex-shrink-0 tracking-[0.5px]">
+          {user.name.split(' ').map(n => n[0]).join('')}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[12.5px] font-bold text-[var(--text-primary)] tracking-[0.1px]">{user.name}</div>
+          <div className="text-[10.5px] text-[var(--text-muted)] mt-px">{user.role} · {user.region}</div>
         </div>
         <button
           className="theme-switch"

@@ -20,22 +20,22 @@ const kpis = [
   { label: 'SALY Primary', value: 8, format: 'pct', delta: 8, deltaUnit: '%', comparison: 'Primary up +8%' },
 ];
 
-const relevantFindings = driftFindings.filter(f => ['S-03'].includes(f.target_screen));
+const relevantFindings = driftFindings.filter(f => f.target_screen === 'S-03');
 
 const tableColumns = [
   { key: 'name', label: 'Distributor' },
   { key: 'district', label: 'District' },
   { key: 'primary_value', label: 'Primary ₹', format: v => `₹${(v / 100000).toFixed(1)}L` },
   { key: 'secondary_value', label: 'Secondary ₹', format: v => `₹${(v / 100000).toFixed(1)}L` },
-  { key: 'pipeline_ratio', label: 'Sec:Pri', format: (v, row) => (
-    <span style={{ color: v < 0.60 ? 'var(--critical)' : v < 0.75 ? 'var(--warning)' : 'var(--success)', fontWeight: 600 }}>
-      {v.toFixed(2)}
-    </span>
+  { key: 'pipeline_ratio', label: 'Sec:Pri', format: (v) => (
+    <span style={{ color: v < 0.60 ? 'var(--critical)' : v < 0.75 ? 'var(--warning)' : 'var(--success)', fontWeight: 600 }}>{v.toFixed(2)}</span>
   )},
   { key: 'days_stock', label: 'Days Stock', format: v => <span style={{ color: v > 30 ? 'var(--warning)' : 'inherit' }}>{v}</span> },
   { key: 'outstanding_vs_primary', label: 'Outstanding:Primary', format: v => v ? `${v}%` : '-' },
   { key: 'saly_secondary', label: 'SALY Sec', format: v => <span style={{ color: v < 0 ? 'var(--critical)' : 'var(--success)' }}>{v > 0 ? '+' : ''}{v}%</span> },
 ];
+
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S03Pipeline() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -55,7 +55,7 @@ export default function S03Pipeline() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -64,28 +64,27 @@ export default function S03Pipeline() {
       <div className="two-col">
         <div>
           <div className="section-label">Sec:Pri Trend — 6 Months</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={secPriTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0.5, 1.0]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [v.toFixed(2), 'Sec:Pri']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [v.toFixed(2), 'Sec:Pri']} />
                 <ReferenceLine y={0.60} stroke="var(--critical)" strokeDasharray="4 4" label={{ value: 'Threshold 0.60', position: 'right', fill: 'var(--critical)', fontSize: 10 }} />
                 <Line type="monotone" dataKey="ratio" stroke="var(--warning)" strokeWidth={2} dot={{ fill: 'var(--warning)', r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Primary vs Secondary — Stuffing Detection</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" strokeOpacity={0.3} />
                 <XAxis dataKey="primary_value" name="Primary ₹" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickFormatter={v => `₹${(v / 100000).toFixed(0)}L`} axisLine={false} tickLine={false} label={{ value: 'Primary →', position: 'insideBottom', offset: -2, fill: 'var(--text-muted)', fontSize: 10 }} />
                 <YAxis dataKey="pipeline_ratio" name="Sec:Pri" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} cursor={{ strokeDasharray: '3 3' }} formatter={(v, name) => [name === 'Sec:Pri' ? v.toFixed(2) : `₹${(v / 100000).toFixed(1)}L`, name]} />
+                <Tooltip contentStyle={ttStyle} cursor={{ strokeDasharray: '3 3' }} formatter={(v, name) => [name === 'Sec:Pri' ? v.toFixed(2) : `₹${(v / 100000).toFixed(1)}L`, name]} />
                 <ReferenceLine y={0.60} stroke="var(--critical)" strokeDasharray="3 3" />
                 <Scatter data={l2Pipeline} fill="var(--accent)" opacity={0.8} />
               </ScatterChart>

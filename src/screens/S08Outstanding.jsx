@@ -39,6 +39,8 @@ const tableColumns = [
   )},
 ];
 
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
+
 export default function S08Outstanding() {
   const { trackScreenVisit, setChatOpen } = useApp();
   useEffect(() => { trackScreenVisit('S-08'); }, []);
@@ -57,7 +59,7 @@ export default function S08Outstanding() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -66,12 +68,12 @@ export default function S08Outstanding() {
       <div className="two-col">
         <div>
           <div className="section-label">Outstanding vs Collection vs Primary — 6 Months</div>
-          <div className="chart-container" style={{ height: 210 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 210, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={tripleLineTrend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`₹${v}L`, '']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`₹${v}L`, '']} />
                 <Line type="monotone" dataKey="outstanding" stroke="var(--critical)" strokeWidth={2} dot={{ r: 3, fill: 'var(--critical)' }} name="Outstanding" />
                 <Line type="monotone" dataKey="collection" stroke="var(--success)" strokeWidth={2} dot={{ r: 3, fill: 'var(--success)' }} name="Collection" />
                 <Line type="monotone" dataKey="primary" stroke="var(--info)" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Primary" />
@@ -79,15 +81,14 @@ export default function S08Outstanding() {
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Outstanding:Primary by Distributor</div>
-          <div className="chart-container" style={{ height: 210 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 210, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={l2Outstanding} layout="vertical" margin={{ top: 5, right: 40, left: 100, bottom: 5 }}>
                 <XAxis type="number" domain={[0, 60]} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} />
                 <YAxis type="category" dataKey="name" tick={{ fill: 'var(--text-secondary)', fontSize: 9 }} axisLine={false} tickLine={false} width={95} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}%`, 'Outstanding:Primary']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Outstanding:Primary']} />
                 <ReferenceLine x={30} stroke="var(--warning)" strokeDasharray="3 3" label={{ value: 'Threshold', position: 'top', fill: 'var(--warning)', fontSize: 10 }} />
                 <Bar dataKey="outstanding_vs_primary" radius={3}>
                   {l2Outstanding.map((d, i) => (

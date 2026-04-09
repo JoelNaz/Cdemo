@@ -16,9 +16,9 @@ import './index.css';
 
 function AppLayout() {
   return (
-    <div className="app-layout">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <main className="main-content">
+      <main className="ml-[260px] flex-1 min-h-screen flex flex-col">
         <Routes>
           <Route path="/" element={<S00Landing />} />
           <Route path="/reach" element={<S01Reach />} />

@@ -37,6 +37,8 @@ const tableColumns = [
   { key: 'beat_revenue_vs_design', label: 'vs Design', format: v => <span style={{ color: v < -15 ? 'var(--critical)' : v < 0 ? 'var(--warning)' : 'var(--success)' }}>{v > 0 ? '+' : ''}{v}%</span> },
 ];
 
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
+
 export default function S05Territory() {
   const { trackScreenVisit, setChatOpen } = useApp();
   useEffect(() => { trackScreenVisit('S-05'); }, []);
@@ -55,7 +57,7 @@ export default function S05Territory() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -64,12 +66,12 @@ export default function S05Territory() {
       <div className="two-col">
         <div>
           <div className="section-label">MAU & PJP MAU Trend — 6 Months</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={mauTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[55, 95]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}%`, '']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, '']} />
                 <ReferenceLine y={80} stroke="var(--border-light)" strokeDasharray="3 3" />
                 <Line type="monotone" dataKey="mau" stroke="var(--accent)" strokeWidth={2} dot={{ r: 3, fill: 'var(--accent)' }} name="MAU" />
                 <Line type="monotone" dataKey="pjp" stroke="var(--info)" strokeWidth={2} dot={{ r: 3, fill: 'var(--info)' }} name="PJP MAU" />
@@ -77,15 +79,14 @@ export default function S05Territory() {
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Beat Compliance vs Design</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={l2Territory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="beat_name" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}%`, 'Compliance']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Compliance']} />
                 <ReferenceLine y={84} stroke="var(--success)" strokeDasharray="3 3" label={{ value: 'Target', position: 'top', fill: 'var(--success)', fontSize: 10 }} />
                 <Bar dataKey="visit_compliance" radius={3}>
                   {l2Territory.map((d, i) => (

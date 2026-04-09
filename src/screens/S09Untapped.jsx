@@ -17,7 +17,6 @@ const kpis = [
 
 const relevantFindings = driftFindings.filter(f => ['S-09'].includes(f.target_screen));
 
-// Enrich l2UntappedPotential with demand data
 const untappedWithDemand = l2UntappedPotential.map(u => {
   const d = l2Demand.find(d => d.district === u.district) || {};
   return {
@@ -36,8 +35,12 @@ const tableColumns = [
   { key: 'total_outlets', label: 'Current Outlets' },
   { key: 'market_share', label: 'Mkt Share%', format: v => `${v}%` },
   { key: 'infra_count', label: 'Infra Count' },
-  { key: 'opportunity', label: 'Opportunity', format: v => <span style={{ color: v === 'High' ? 'var(--success)' : v === 'Medium' ? 'var(--warning)' : 'var(--info)' }}>{v}</span> },
+  { key: 'opportunity', label: 'Opportunity', format: v => (
+    <span style={{ color: v === 'High' ? 'var(--success)' : v === 'Medium' ? 'var(--warning)' : 'var(--info)' }}>{v}</span>
+  )},
 ];
+
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S09Untapped() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -57,7 +60,7 @@ export default function S09Untapped() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Strategic Findings (Category B — War Room)</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -66,17 +69,17 @@ export default function S09Untapped() {
       <div className="two-col">
         <div>
           <div className="section-label">Market Share × ND% — Untapped Potential Scatter</div>
-          <div className="chart-container" style={{ height: 230 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 230, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 10, right: 20, left: -10, bottom: 20 }}>
                 <CartesianGrid stroke="var(--border)" strokeOpacity={0.3} />
                 <XAxis dataKey="nd_pct" name="ND%" type="number" domain={[25, 65]} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} label={{ value: 'ND% →', position: 'insideBottom', offset: -10, fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis dataKey="market_share" name="Market Share" type="number" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} label={{ value: 'Mkt Share% →', angle: -90, position: 'insideLeft', fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} cursor={{ strokeDasharray: '3 3' }} content={({ active, payload }) => {
+                <Tooltip contentStyle={ttStyle} cursor={{ strokeDasharray: '3 3' }} content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const d = payload[0].payload;
                     return (
-                      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', fontSize: 12 }}>
+                      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: 'var(--text-primary)' }}>
                         <div style={{ fontWeight: 600 }}>{d.district}</div>
                         <div>ND%: {d.nd_pct?.toFixed(1)}%</div>
                         <div>Market Share: {d.market_share}%</div>
@@ -94,7 +97,7 @@ export default function S09Untapped() {
               </ScatterChart>
             </ResponsiveContainer>
           </div>
-          <div style={{ display: 'flex', gap: 16, marginTop: 4, fontSize: 11, color: 'var(--text-muted)' }}>
+          <div className="flex gap-4 mt-1 text-[11px] text-[var(--text-muted)]">
             <span style={{ color: 'var(--success)' }}>● High opportunity</span>
             <span style={{ color: 'var(--warning)' }}>● Medium</span>
             <span style={{ color: 'var(--info)' }}>● Low</span>
@@ -103,12 +106,12 @@ export default function S09Untapped() {
 
         <div>
           <div className="section-label">Expansion Potential by District</div>
-          <div className="chart-container" style={{ height: 230 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 230, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={untappedWithDemand} layout="vertical" margin={{ top: 5, right: 40, left: 80, bottom: 5 }}>
                 <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `₹${(v / 10000000).toFixed(1)}Cr`} />
                 <YAxis type="category" dataKey="district" tick={{ fill: 'var(--text-secondary)', fontSize: 10 }} axisLine={false} tickLine={false} width={75} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`₹${(v / 10000000).toFixed(2)}Cr`, 'GSV Potential']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`₹${(v / 10000000).toFixed(2)}Cr`, 'GSV Potential']} />
                 <Bar dataKey="gsv_potential" radius={3}>
                   {untappedWithDemand.map((d, i) => (
                     <Cell key={i} fill={d.opportunity === 'High' ? 'var(--success)' : d.opportunity === 'Medium' ? 'var(--warning)' : 'var(--info)'} />

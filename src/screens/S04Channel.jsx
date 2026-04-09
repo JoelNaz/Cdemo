@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
@@ -38,8 +38,13 @@ const tableColumns = [
   { key: 'qc_share', label: 'QC%', format: v => `${v}%` },
   { key: 'ecomm_share', label: 'Ecomm%', format: v => `${v}%` },
   { key: 'gt_share_delta_sply', label: 'GT Δ vs SPLY', format: v => <span style={{ color: v < -2 ? 'var(--critical)' : v < 0 ? 'var(--warning)' : 'var(--success)' }}>{v > 0 ? '+' : ''}{v}pp</span> },
-  { key: 'structural_shift', label: 'Shift Flag', format: v => v ? <span className="badge-critical">Structural</span> : <span className="badge-info">Seasonal</span> },
+  { key: 'structural_shift', label: 'Shift Flag', format: v => v
+    ? <span className="bg-[var(--critical-bg)] text-[var(--critical)] text-[10px] font-bold px-[7px] py-0.5 rounded-[3px] uppercase tracking-[0.8px]">Structural</span>
+    : <span className="bg-[var(--info-bg)] text-[var(--info)] text-[10px] font-bold px-[7px] py-0.5 rounded-[3px] uppercase tracking-[0.8px]">Seasonal</span>
+  },
 ];
+
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S04Channel() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -59,7 +64,7 @@ export default function S04Channel() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -68,27 +73,26 @@ export default function S04Channel() {
       <div className="two-col">
         <div>
           <div className="section-label">Current Channel Mix</div>
-          <div className="chart-container" style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px] flex items-center justify-center" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={pieData} cx="40%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" paddingAngle={3}>
                   {pieData.map((d, i) => <Cell key={i} fill={d.color} />)}
                 </Pie>
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}%`, '']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, '']} />
                 <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, color: 'var(--text-secondary)' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Channel Share Trend — Quarterly</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={channelTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="q" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} />
+                <Tooltip contentStyle={ttStyle} />
                 <Bar dataKey="gt" stackId="a" fill="var(--accent)" name="GT" />
                 <Bar dataKey="mt" stackId="a" fill="var(--info)" name="MT" />
                 <Bar dataKey="qc" stackId="a" fill="var(--success)" name="QC" />

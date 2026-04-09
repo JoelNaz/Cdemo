@@ -7,19 +7,14 @@ import { l2Benchmark, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 
 const gapTrend = [
-  { month: 'Oct', nd_gap: -5.2, ext_gap: -8.0 },
-  { month: 'Nov', nd_gap: -6.1, ext_gap: -8.9 },
-  { month: 'Dec', nd_gap: -7.0, ext_gap: -9.8 },
-  { month: 'Jan', nd_gap: -7.8, ext_gap: -10.5 },
-  { month: 'Feb', nd_gap: -8.9, ext_gap: -11.2 },
-  { month: 'Mar', nd_gap: -9.8, ext_gap: -12.0 },
+  { month: 'Oct', nd_gap: -5.2, ext_gap: -8.0 }, { month: 'Nov', nd_gap: -6.1, ext_gap: -8.9 },
+  { month: 'Dec', nd_gap: -7.0, ext_gap: -9.8 }, { month: 'Jan', nd_gap: -7.8, ext_gap: -10.5 },
+  { month: 'Feb', nd_gap: -8.9, ext_gap: -11.2 }, { month: 'Mar', nd_gap: -9.8, ext_gap: -12.0 },
 ];
 
 const cohortBar = [
-  { name: 'P90 (Best)', nd: 56, ext: 82 },
-  { name: 'P75', nd: 51, ext: 76 },
-  { name: 'Median', nd: 48, ext: 70 },
-  { name: 'North-2', nd: 42.3, ext: 61.5 },
+  { name: 'P90 (Best)', nd: 56, ext: 82 }, { name: 'P75', nd: 51, ext: 76 },
+  { name: 'Median', nd: 48, ext: 70 }, { name: 'North-2', nd: 42.3, ext: 61.5 },
   { name: 'P25', nd: 38, ext: 55 },
 ];
 
@@ -46,6 +41,8 @@ const tableColumns = [
   { key: 'trend_3m', label: 'Trend', format: v => <span style={{ color: v === 'widening' ? 'var(--critical)' : v === 'stable' ? 'var(--warning)' : 'var(--success)' }}>{v}</span> },
 ];
 
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
+
 export default function S07Benchmark() {
   const { trackScreenVisit, setChatOpen } = useApp();
   useEffect(() => { trackScreenVisit('S-07'); }, []);
@@ -64,7 +61,7 @@ export default function S07Benchmark() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -73,12 +70,12 @@ export default function S07Benchmark() {
       <div className="two-col">
         <div>
           <div className="section-label">Gap to Cohort Median — Widening Trend</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={gapTrend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}pp`, '']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}pp`, '']} />
                 <ReferenceLine y={0} stroke="var(--border)" />
                 <Line type="monotone" dataKey="nd_gap" stroke="var(--critical)" strokeWidth={2} dot={{ r: 3, fill: 'var(--critical)' }} name="ND% Gap" />
                 <Line type="monotone" dataKey="ext_gap" stroke="var(--warning)" strokeWidth={2} dot={{ r: 3, fill: 'var(--warning)' }} name="Extraction Gap" />
@@ -86,15 +83,14 @@ export default function S07Benchmark() {
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Cohort Percentile Position</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={cohortBar} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <XAxis dataKey="name" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[30, 65]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}%`, 'ND%']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'ND%']} />
                 <Bar dataKey="nd" radius={3}>
                   {cohortBar.map((d, i) => (
                     <Cell key={i} fill={d.name === 'North-2' ? 'var(--critical)' : 'var(--border-light)'} />

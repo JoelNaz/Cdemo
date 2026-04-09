@@ -12,12 +12,9 @@ const ndTrend = [
 ];
 
 const outletFunnel = [
-  { stage: 'Viable (POI)', count: 8200 },
-  { stage: 'Geo-Tagged', count: 5400 },
-  { stage: 'PJP', count: 4100 },
-  { stage: 'Billed', count: 3800 },
-  { stage: 'Active', count: 3200 },
-  { stage: 'GEO ECO', count: 2880 },
+  { stage: 'Viable (POI)', count: 8200 }, { stage: 'Geo-Tagged', count: 5400 },
+  { stage: 'PJP', count: 4100 }, { stage: 'Billed', count: 3800 },
+  { stage: 'Active', count: 3200 }, { stage: 'GEO ECO', count: 2880 },
 ];
 
 const kpis = [
@@ -29,7 +26,7 @@ const kpis = [
   { label: 'Coverage Gap', value: 3960, delta: 480, deltaUnit: ' outlets gap', comparison: 'vs POI universe' },
 ];
 
-const relevantFindings = driftFindings.filter(f => ['S-01'].includes(f.target_screen));
+const relevantFindings = driftFindings.filter(f => f.target_screen === 'S-01');
 
 const tableColumns = [
   { key: 'district', label: 'District' },
@@ -46,6 +43,8 @@ const highlightRules = {
   nd_pct: { negative: 40 },
   outlet_churn: { highlight: v => v > 50 },
 };
+
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S01Reach() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -65,7 +64,7 @@ export default function S01Reach() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings on This Screen</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -74,26 +73,25 @@ export default function S01Reach() {
       <div className="two-col">
         <div>
           <div className="section-label">ND% Trend — 6 Months</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={ndTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[38, 50]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v}%`, 'ND%']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'ND%']} />
                 <Line type="monotone" dataKey="nd" stroke="var(--critical)" strokeWidth={2} dot={{ fill: 'var(--critical)', r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Outlet Funnel</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={outletFunnel} layout="vertical" margin={{ top: 5, right: 40, left: 60, bottom: 5 }}>
                 <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis type="category" dataKey="stage" tick={{ fill: 'var(--text-secondary)', fontSize: 10 }} axisLine={false} tickLine={false} width={70} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} />
+                <Tooltip contentStyle={ttStyle} />
                 <Bar dataKey="count" radius={3}>
                   {outletFunnel.map((_, i) => (
                     <Cell key={i} fill={i === 0 ? 'var(--border-light)' : i < 3 ? 'var(--info)' : i < 5 ? 'var(--accent)' : 'var(--success)'} />

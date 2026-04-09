@@ -37,6 +37,8 @@ const tableColumns = [
   }},
 ];
 
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
+
 export default function S02Extraction() {
   const { trackScreenVisit, setChatOpen } = useApp();
   useEffect(() => { trackScreenVisit('S-02'); }, []);
@@ -55,7 +57,7 @@ export default function S02Extraction() {
       <KpiStrip kpis={kpis} />
 
       {relevantFindings.length > 0 && (
-        <div className="findings-section">
+        <div className="mb-5">
           <div className="section-label">Active Findings</div>
           {relevantFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         </div>
@@ -64,27 +66,26 @@ export default function S02Extraction() {
       <div className="two-col">
         <div>
           <div className="section-label">WSP/Outlet vs Benchmark Trend</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={extractionTrend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`₹${v.toLocaleString()}`, '']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`₹${v.toLocaleString()}`, '']} />
                 <Line type="monotone" dataKey="wsp" stroke="var(--critical)" strokeWidth={2} dot={{ r: 3, fill: 'var(--critical)' }} name="WSP/Outlet" />
                 <Line type="monotone" dataKey="bench" stroke="var(--success)" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Benchmark" />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
-
         <div>
           <div className="section-label">Extraction Gap by District</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={l2Extraction.slice(0, 6)} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <XAxis dataKey="district" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={v => [`${v.toFixed(1)}%`, 'Extraction Rate']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v.toFixed(1)}%`, 'Extraction Rate']} />
                 <ReferenceLine y={73.8} stroke="var(--success)" strokeDasharray="3 3" label={{ value: 'Benchmark', position: 'top', fill: 'var(--success)', fontSize: 10 }} />
                 <Bar dataKey="extraction_rate" radius={4}>
                   {l2Extraction.slice(0, 6).map((d, i) => (

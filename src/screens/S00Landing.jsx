@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import { kpiSummary, driftFindings } from '../data/mockData';
@@ -23,6 +23,8 @@ const criticalFindings = driftFindings.filter(f => f.severity === 'critical');
 const warningFindings = driftFindings.filter(f => f.severity === 'warning');
 const infoFindings = driftFindings.filter(f => f.severity === 'info' || f.category === 'B');
 
+const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
+
 export default function S00Landing() {
   const { trackScreenVisit, setChatOpen } = useApp();
   useEffect(() => { trackScreenVisit('S-00'); }, []);
@@ -35,31 +37,30 @@ export default function S00Landing() {
           <h2 className="screen-title">Growth Command Centre</h2>
           <div className="screen-subtitle">North-2 Region · March 2026 · MTD 58% complete</div>
         </div>
-        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>
-          Ask AI
-        </button>
+        <button className="ask-ai-btn" onClick={() => setChatOpen(true)}>Ask AI</button>
       </div>
 
       <KpiStrip kpis={kpis} />
 
-      <div className="mtd-completion-bar">
-        <div className="mtd-label">MTD Completion</div>
-        <div className="mtd-track">
-          <div className="mtd-fill" style={{ width: '58%' }} />
-          <div className="mtd-marker" style={{ left: '58%' }}><span>58%</span></div>
+      {/* MTD bar */}
+      <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl px-[18px] py-3 mb-[22px] flex items-center gap-4" style={{ boxShadow: 'var(--card-shadow)' }}>
+        <div className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-[1px] whitespace-nowrap">MTD Completion</div>
+        <div className="flex-1 h-2 bg-[var(--bg-tertiary)] rounded-full relative overflow-visible">
+          <div className="h-full bg-[var(--accent)] rounded-full transition-[width] duration-500" style={{ width: '58%' }} />
+          <div className="absolute top-[-22px] text-[10px] font-bold text-[var(--accent)]" style={{ left: '58%', transform: 'translateX(-50%)' }}>58%</div>
         </div>
-        <div className="mtd-hint">42% of month remaining</div>
+        <div className="text-[10.5px] text-[var(--text-muted)] whitespace-nowrap font-medium">42% remaining</div>
       </div>
 
       <div className="two-col">
         <div>
           <div className="section-label">Revenue Trend — 6 Months</div>
-          <div className="chart-container" style={{ height: 200 }}>
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={mtdData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 }} formatter={(v) => [`₹${v}Cr`, 'Revenue']} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`₹${v}Cr`, 'Revenue']} />
                 <ReferenceLine y={8.5} stroke="var(--border-light)" strokeDasharray="3 3" label={{ value: 'SPLY avg', position: 'right', fill: 'var(--text-muted)', fontSize: 10 }} />
                 <Line type="monotone" dataKey="value" stroke="var(--accent)" strokeWidth={2} dot={{ fill: 'var(--accent)', r: 3 }} />
               </LineChart>
@@ -69,23 +70,22 @@ export default function S00Landing() {
 
         <div>
           <div className="section-label">Findings Summary</div>
-          <div className="findings-summary-grid">
-            <div className="findings-count-card critical">
-              <div className="count">{criticalFindings.length}</div>
-              <div className="label">Critical</div>
-            </div>
-            <div className="findings-count-card warning">
-              <div className="count">{warningFindings.length}</div>
-              <div className="label">Warning</div>
-            </div>
-            <div className="findings-count-card info">
-              <div className="count">{infoFindings.length}</div>
-              <div className="label">Info / Cat B</div>
-            </div>
-            <div className="findings-count-card total">
-              <div className="count">{driftFindings.length}</div>
-              <div className="label">Total Active</div>
-            </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {[
+              { label: 'Critical', count: criticalFindings.length, color: 'var(--critical)', borderColor: 'border-l-[var(--critical)]' },
+              { label: 'Warning', count: warningFindings.length, color: 'var(--warning)', borderColor: 'border-l-[var(--warning)]' },
+              { label: 'Info / Cat B', count: infoFindings.length, color: 'var(--info)', borderColor: 'border-l-[var(--info)]' },
+              { label: 'Total Active', count: driftFindings.length, color: 'var(--text-primary)', borderColor: '' },
+            ].map(({ label, count, color, borderColor }) => (
+              <div
+                key={label}
+                className={`bg-[var(--bg-card)] border border-[var(--border)] border-l-[3px] ${borderColor} rounded-xl p-4 text-center transition-transform hover:-translate-y-0.5`}
+                style={{ boxShadow: 'var(--card-shadow)' }}
+              >
+                <div className="text-[34px] font-extrabold leading-none tracking-[-1.5px] [font-variant-numeric:tabular-nums]" style={{ color }}>{count}</div>
+                <div className="text-[9.5px] font-bold text-[var(--text-muted)] uppercase tracking-[0.9px] mt-1.5">{label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default function S00Landing() {
         Active Drift Findings — Ranked by Severity
         <span className="section-hint">Click any finding to drill down</span>
       </div>
-      <div className="findings-feed">
+      <div className="flex flex-col gap-2">
         {criticalFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         {warningFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
         {infoFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
