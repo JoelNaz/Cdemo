@@ -48,8 +48,17 @@ export default function Sidebar() {
           <div className="user-name">{user.name}</div>
           <div className="user-role">{user.role} &middot; {user.region}</div>
         </div>
-        <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
-          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+        <button
+          className="theme-switch"
+          onClick={toggleTheme}
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          <span className={`theme-track ${theme}`}>
+            <span className="theme-thumb">
+              {theme === 'dark' ? <Moon size={10} strokeWidth={2.5} /> : <Sun size={10} strokeWidth={2.5} />}
+            </span>
+          </span>
         </button>
       </div>
     </nav>
