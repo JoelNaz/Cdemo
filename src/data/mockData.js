@@ -59,18 +59,20 @@ export const l2Extraction = [
   { mm_id: 'MM-N2-004', district: 'Varanasi', channel: 'GT', category: 'Hair Care', period: '2026-03', secondary_value: 1500000, avg_sales_per_outlet: 3846, wd_pct: 52.3, extraction_rate: 58, benchmark_extraction: 88, extraction_gap: 30, uos: 280, lines_per_call: 2.3 },
   { mm_id: 'MM-N2-005', district: 'Allahabad', channel: 'GT', category: 'Hair Care', period: '2026-03', secondary_value: 980000, avg_sales_per_outlet: 3161, wd_pct: 44.1, extraction_rate: 49, benchmark_extraction: 88, extraction_gap: 39, uos: 200, lines_per_call: 2.0 },
   { mm_id: 'MM-N2-006', district: 'Meerut', channel: 'GT', category: 'Skin Care', period: '2026-03', secondary_value: 1100000, avg_sales_per_outlet: 3929, wd_pct: 51.2, extraction_rate: 56, benchmark_extraction: 82, extraction_gap: 26, uos: 190, lines_per_call: 2.5 },
+  { mm_id: 'MM-N2-007', district: 'Bareilly', channel: 'GT', category: 'Hair Care', period: '2026-03', secondary_value: 630000, avg_sales_per_outlet: 3000, wd_pct: 42.5, extraction_rate: 52, benchmark_extraction: 88, extraction_gap: 36, uos: 150, lines_per_call: 2.1 },
+  { mm_id: 'MM-N2-008', district: 'Gorakhpur', channel: 'GT', category: 'Hair Care', period: '2026-03', secondary_value: 408000, avg_sales_per_outlet: 2400, wd_pct: 35.2, extraction_rate: 42, benchmark_extraction: 88, extraction_gap: 46, uos: 110, lines_per_call: 1.8 },
 ];
 
 // --- L2 PIPELINE DATA ---
 export const l2Pipeline = [
-  { distributor_id: 'DB-001', name: 'Sharma Distributors', district: 'Lucknow', category: 'All', period: '2026-03', primary_value: 8500000, secondary_value: 5865000, pipeline_ratio: 0.69, billing_frequency: 18, days_stock: 42, ofr: 78, saly_primary: 12, saly_secondary: -8 },
-  { distributor_id: 'DB-002', name: 'Gupta Agencies', district: 'Lucknow', category: 'All', period: '2026-03', primary_value: 6200000, secondary_value: 3720000, pipeline_ratio: 0.60, billing_frequency: 14, days_stock: 55, ofr: 72, saly_primary: 18, saly_secondary: -12 },
-  { distributor_id: 'DB-003', name: 'Singh Traders', district: 'Kanpur', category: 'All', period: '2026-03', primary_value: 5400000, secondary_value: 4050000, pipeline_ratio: 0.75, billing_frequency: 20, days_stock: 35, ofr: 84, saly_primary: 5, saly_secondary: -3 },
-  { distributor_id: 'DB-004', name: 'Verma & Sons', district: 'Kanpur', category: 'All', period: '2026-03', primary_value: 4100000, secondary_value: 2460000, pipeline_ratio: 0.60, billing_frequency: 12, days_stock: 48, ofr: 68, saly_primary: 22, saly_secondary: -15 },
-  { distributor_id: 'DB-005', name: 'Patel Distribution', district: 'Agra', category: 'All', period: '2026-03', primary_value: 3800000, secondary_value: 2850000, pipeline_ratio: 0.75, billing_frequency: 16, days_stock: 38, ofr: 80, saly_primary: 8, saly_secondary: -5 },
-  { distributor_id: 'DB-006', name: 'Kumar Enterprises', district: 'Varanasi', category: 'All', period: '2026-03', primary_value: 3200000, secondary_value: 1920000, pipeline_ratio: 0.60, billing_frequency: 11, days_stock: 52, ofr: 65, saly_primary: 25, saly_secondary: -18 },
-  { distributor_id: 'DB-007', name: 'Mishra Trading Co', district: 'Allahabad', category: 'All', period: '2026-03', primary_value: 2600000, secondary_value: 2080000, pipeline_ratio: 0.80, billing_frequency: 19, days_stock: 32, ofr: 86, saly_primary: 3, saly_secondary: 2 },
-  { distributor_id: 'DB-008', name: 'Yadav Agencies', district: 'Meerut', category: 'All', period: '2026-03', primary_value: 2100000, secondary_value: 1365000, pipeline_ratio: 0.65, billing_frequency: 13, days_stock: 45, ofr: 71, saly_primary: 15, saly_secondary: -10 },
+  { mm_id: 'MM-N2-001', distributor_id: 'DB-001', name: 'Sharma Distributors', district: 'Lucknow', category: 'All', period: '2026-03', primary_value: 8500000, secondary_value: 5865000, pipeline_ratio: 0.69, billing_frequency: 18, days_stock: 42, ofr: 78, saly_primary: 12, saly_secondary: -8 },
+  { mm_id: 'MM-N2-001', distributor_id: 'DB-002', name: 'Gupta Agencies', district: 'Lucknow', category: 'All', period: '2026-03', primary_value: 6200000, secondary_value: 3720000, pipeline_ratio: 0.60, billing_frequency: 14, days_stock: 55, ofr: 72, saly_primary: 18, saly_secondary: -12 },
+  { mm_id: 'MM-N2-002', distributor_id: 'DB-003', name: 'Singh Traders', district: 'Kanpur', category: 'All', period: '2026-03', primary_value: 5400000, secondary_value: 4050000, pipeline_ratio: 0.75, billing_frequency: 20, days_stock: 35, ofr: 84, saly_primary: 5, saly_secondary: -3 },
+  { mm_id: 'MM-N2-002', distributor_id: 'DB-004', name: 'Verma & Sons', district: 'Kanpur', category: 'All', period: '2026-03', primary_value: 4100000, secondary_value: 2460000, pipeline_ratio: 0.60, billing_frequency: 12, days_stock: 48, ofr: 68, saly_primary: 22, saly_secondary: -15 },
+  { mm_id: 'MM-N2-003', distributor_id: 'DB-005', name: 'Patel Distribution', district: 'Agra', category: 'All', period: '2026-03', primary_value: 3800000, secondary_value: 2850000, pipeline_ratio: 0.75, billing_frequency: 16, days_stock: 38, ofr: 80, saly_primary: 8, saly_secondary: -5 },
+  { mm_id: 'MM-N2-004', distributor_id: 'DB-006', name: 'Kumar Enterprises', district: 'Varanasi', category: 'All', period: '2026-03', primary_value: 3200000, secondary_value: 1920000, pipeline_ratio: 0.60, billing_frequency: 11, days_stock: 52, ofr: 65, saly_primary: 25, saly_secondary: -18 },
+  { mm_id: 'MM-N2-005', distributor_id: 'DB-007', name: 'Mishra Trading Co', district: 'Allahabad', category: 'All', period: '2026-03', primary_value: 2600000, secondary_value: 2080000, pipeline_ratio: 0.80, billing_frequency: 19, days_stock: 32, ofr: 86, saly_primary: 3, saly_secondary: 2 },
+  { mm_id: 'MM-N2-006', distributor_id: 'DB-008', name: 'Yadav Agencies', district: 'Meerut', category: 'All', period: '2026-03', primary_value: 2100000, secondary_value: 1365000, pipeline_ratio: 0.65, billing_frequency: 13, days_stock: 45, ofr: 71, saly_primary: 15, saly_secondary: -10 },
 ];
 
 // --- L2 CHANNEL MIX ---
@@ -81,6 +83,8 @@ export const l2ChannelMix = [
   { mm_id: 'MM-N2-004', district: 'Varanasi', period: '2026-03', gt_share: 78, mt_share: 11, qc_share: 6, ecomm_share: 5, gt_share_delta_sply: -1.5, structural_shift: false },
   { mm_id: 'MM-N2-005', district: 'Allahabad', period: '2026-03', gt_share: 82, mt_share: 8, qc_share: 5, ecomm_share: 5, gt_share_delta_sply: -0.8, structural_shift: false },
   { mm_id: 'MM-N2-006', district: 'Meerut', period: '2026-03', gt_share: 69, mt_share: 18, qc_share: 8, ecomm_share: 5, gt_share_delta_sply: -3.5, structural_shift: true },
+  { mm_id: 'MM-N2-007', district: 'Bareilly', period: '2026-03', gt_share: 80, mt_share: 10, qc_share: 5, ecomm_share: 5, gt_share_delta_sply: -1.2, structural_shift: false },
+  { mm_id: 'MM-N2-008', district: 'Gorakhpur', period: '2026-03', gt_share: 86, mt_share: 7, qc_share: 4, ecomm_share: 3, gt_share_delta_sply: -0.5, structural_shift: false },
 ];
 
 // --- L2 DEMAND ---
@@ -91,36 +95,38 @@ export const l2Demand = [
   { mm_id: 'MM-N2-004', district: 'Varanasi', category: 'Hair Care', period: '2026-03', demand_index: 65, demand_rank: 5, demand_vs_distribution_gap: 38, hotspot_score: 58, market_share_estimate: 12.1 },
   { mm_id: 'MM-N2-005', district: 'Allahabad', category: 'Hair Care', period: '2026-03', demand_index: 82, demand_rank: 2, demand_vs_distribution_gap: 45, hotspot_score: 81, market_share_estimate: 9.4 },
   { mm_id: 'MM-N2-006', district: 'Meerut', category: 'Skin Care', period: '2026-03', demand_index: 68, demand_rank: 6, demand_vs_distribution_gap: 35, hotspot_score: 62, market_share_estimate: 14.3 },
+  { mm_id: 'MM-N2-007', district: 'Bareilly', category: 'Hair Care', period: '2026-03', demand_index: 52, demand_rank: 7, demand_vs_distribution_gap: 40, hotspot_score: 48, market_share_estimate: 8.2 },
+  { mm_id: 'MM-N2-008', district: 'Gorakhpur', category: 'Hair Care', period: '2026-03', demand_index: 42, demand_rank: 8, demand_vs_distribution_gap: 52, hotspot_score: 38, market_share_estimate: 6.5 },
 ];
 
 // --- L2 TERRITORY ---
 export const l2Territory = [
-  { beat_id: 'BT-001', district: 'Lucknow', period: '2026-03', planned_outlets: 120, actual_visited: 92, visit_compliance: 76.7, productive_calls: 68.5, mau: 82, pjp_mau: 74, qau: 88, avg_lines_per_call: 3.1, beat_revenue: 1800000, beat_revenue_vs_design: -12 },
-  { beat_id: 'BT-002', district: 'Lucknow', period: '2026-03', planned_outlets: 95, actual_visited: 78, visit_compliance: 82.1, productive_calls: 72.3, mau: 85, pjp_mau: 78, qau: 90, avg_lines_per_call: 3.4, beat_revenue: 1500000, beat_revenue_vs_design: -8 },
-  { beat_id: 'BT-003', district: 'Kanpur', period: '2026-03', planned_outlets: 110, actual_visited: 72, visit_compliance: 65.5, productive_calls: 58.2, mau: 71, pjp_mau: 62, qau: 78, avg_lines_per_call: 2.6, beat_revenue: 1200000, beat_revenue_vs_design: -25 },
-  { beat_id: 'BT-004', district: 'Kanpur', period: '2026-03', planned_outlets: 88, actual_visited: 70, visit_compliance: 79.5, productive_calls: 70.1, mau: 80, pjp_mau: 72, qau: 85, avg_lines_per_call: 3.0, beat_revenue: 1100000, beat_revenue_vs_design: -10 },
-  { beat_id: 'BT-005', district: 'Agra', period: '2026-03', planned_outlets: 100, actual_visited: 64, visit_compliance: 64.0, productive_calls: 55.8, mau: 68, pjp_mau: 58, qau: 74, avg_lines_per_call: 2.4, beat_revenue: 950000, beat_revenue_vs_design: -28 },
-  { beat_id: 'BT-006', district: 'Varanasi', period: '2026-03', planned_outlets: 85, actual_visited: 60, visit_compliance: 70.6, productive_calls: 62.4, mau: 75, pjp_mau: 66, qau: 80, avg_lines_per_call: 2.7, beat_revenue: 820000, beat_revenue_vs_design: -15 },
-  { beat_id: 'BT-007', district: 'Meerut', period: '2026-03', planned_outlets: 78, actual_visited: 55, visit_compliance: 70.5, productive_calls: 61.3, mau: 73, pjp_mau: 64, qau: 79, avg_lines_per_call: 2.8, beat_revenue: 780000, beat_revenue_vs_design: -18 },
+  { mm_id: 'MM-N2-001', beat_id: 'BT-001', district: 'Lucknow', territory_owner: 'ASM Priya Mehta', period: '2026-03', planned_outlets: 120, actual_visited: 92, visit_compliance: 76.7, productive_calls: 68.5, mau: 82, pjp_mau: 74, qau: 88, avg_lines_per_call: 3.1, beat_revenue: 1800000, beat_revenue_vs_design: -12 },
+  { mm_id: 'MM-N2-001', beat_id: 'BT-002', district: 'Lucknow', territory_owner: 'ASM Priya Mehta', period: '2026-03', planned_outlets: 95, actual_visited: 78, visit_compliance: 82.1, productive_calls: 72.3, mau: 85, pjp_mau: 78, qau: 90, avg_lines_per_call: 3.4, beat_revenue: 1500000, beat_revenue_vs_design: -8 },
+  { mm_id: 'MM-N2-002', beat_id: 'BT-003', district: 'Kanpur', territory_owner: 'ASM Priya Mehta', period: '2026-03', planned_outlets: 110, actual_visited: 72, visit_compliance: 65.5, productive_calls: 58.2, mau: 71, pjp_mau: 62, qau: 78, avg_lines_per_call: 2.6, beat_revenue: 1200000, beat_revenue_vs_design: -25 },
+  { mm_id: 'MM-N2-002', beat_id: 'BT-004', district: 'Kanpur', territory_owner: 'ASM Priya Mehta', period: '2026-03', planned_outlets: 88, actual_visited: 70, visit_compliance: 79.5, productive_calls: 70.1, mau: 80, pjp_mau: 72, qau: 85, avg_lines_per_call: 3.0, beat_revenue: 1100000, beat_revenue_vs_design: -10 },
+  { mm_id: 'MM-N2-003', beat_id: 'BT-005', district: 'Agra', territory_owner: 'ASM Vikram Patel', period: '2026-03', planned_outlets: 100, actual_visited: 64, visit_compliance: 64.0, productive_calls: 55.8, mau: 68, pjp_mau: 58, qau: 74, avg_lines_per_call: 2.4, beat_revenue: 950000, beat_revenue_vs_design: -28 },
+  { mm_id: 'MM-N2-004', beat_id: 'BT-006', district: 'Varanasi', territory_owner: 'ASM Rahul Singh', period: '2026-03', planned_outlets: 85, actual_visited: 60, visit_compliance: 70.6, productive_calls: 62.4, mau: 75, pjp_mau: 66, qau: 80, avg_lines_per_call: 2.7, beat_revenue: 820000, beat_revenue_vs_design: -15 },
+  { mm_id: 'MM-N2-006', beat_id: 'BT-007', district: 'Meerut', territory_owner: 'ASM Amit Kumar', period: '2026-03', planned_outlets: 78, actual_visited: 55, visit_compliance: 70.5, productive_calls: 61.3, mau: 73, pjp_mau: 64, qau: 79, avg_lines_per_call: 2.8, beat_revenue: 780000, beat_revenue_vs_design: -18 },
 ];
 
 // --- L2 PROMO ---
 export const l2Promo = [
-  { scheme_id: 'SCH-001', name: 'Summer Hair Care Push', district: 'Lucknow', period: '2026-03', baseline_value: 4200000, actual_value: 4620000, uplift_value: 420000, uplift_pct: 10, roi: 1.8, eligible_outlets: 800, participating_outlets: 480, participation_rate: 60 },
-  { scheme_id: 'SCH-002', name: 'Skin Care Bundle Offer', district: 'Kanpur', period: '2026-03', baseline_value: 1900000, actual_value: 1995000, uplift_value: 95000, uplift_pct: 5, roi: 0.9, eligible_outlets: 520, participating_outlets: 210, participation_rate: 40 },
-  { scheme_id: 'SCH-003', name: 'Rural Penetration Scheme', district: 'Varanasi', period: '2026-03', baseline_value: 1500000, actual_value: 1575000, uplift_value: 75000, uplift_pct: 5, roi: 0.7, eligible_outlets: 350, participating_outlets: 105, participation_rate: 30 },
-  { scheme_id: 'SCH-004', name: 'GT Loyalty Program', district: 'Agra', period: '2026-03', baseline_value: 2100000, actual_value: 2520000, uplift_value: 420000, uplift_pct: 20, roi: 3.2, eligible_outlets: 400, participating_outlets: 320, participation_rate: 80 },
-  { scheme_id: 'SCH-005', name: 'Monsoon Stock-Up', district: 'Meerut', period: '2026-03', baseline_value: 1100000, actual_value: 1155000, uplift_value: 55000, uplift_pct: 5, roi: 0.6, eligible_outlets: 280, participating_outlets: 84, participation_rate: 30 },
+  { mm_id: 'MM-N2-001', scheme_id: 'SCH-001', name: 'Summer Hair Care Push', district: 'Lucknow', period: '2026-03', baseline_value: 4200000, actual_value: 4620000, uplift_value: 420000, uplift_pct: 10, roi: 1.8, eligible_outlets: 800, participating_outlets: 480, participation_rate: 60 },
+  { mm_id: 'MM-N2-002', scheme_id: 'SCH-002', name: 'Skin Care Bundle Offer', district: 'Kanpur', period: '2026-03', baseline_value: 1900000, actual_value: 1995000, uplift_value: 95000, uplift_pct: 5, roi: 0.9, eligible_outlets: 520, participating_outlets: 210, participation_rate: 40 },
+  { mm_id: 'MM-N2-004', scheme_id: 'SCH-003', name: 'Rural Penetration Scheme', district: 'Varanasi', period: '2026-03', baseline_value: 1500000, actual_value: 1575000, uplift_value: 75000, uplift_pct: 5, roi: 0.7, eligible_outlets: 350, participating_outlets: 105, participation_rate: 30 },
+  { mm_id: 'MM-N2-003', scheme_id: 'SCH-004', name: 'GT Loyalty Program', district: 'Agra', period: '2026-03', baseline_value: 2100000, actual_value: 2520000, uplift_value: 420000, uplift_pct: 20, roi: 3.2, eligible_outlets: 400, participating_outlets: 320, participation_rate: 80 },
+  { mm_id: 'MM-N2-006', scheme_id: 'SCH-005', name: 'Monsoon Stock-Up', district: 'Meerut', period: '2026-03', baseline_value: 1100000, actual_value: 1155000, uplift_value: 55000, uplift_pct: 5, roi: 0.6, eligible_outlets: 280, participating_outlets: 84, participation_rate: 30 },
 ];
 
 // --- L2 OUTSTANDING ---
 export const l2Outstanding = [
-  { distributor_id: 'DB-001', name: 'Sharma Distributors', district: 'Lucknow', period: '2026-03', total_outstanding: 2800000, outstanding_gt30d: 1120000, outstanding_lt30d: 1680000, collection_value: 6120000, collection_rate: 72, outstanding_vs_primary: 33 },
-  { distributor_id: 'DB-002', name: 'Gupta Agencies', district: 'Lucknow', period: '2026-03', total_outstanding: 2400000, outstanding_gt30d: 1200000, outstanding_lt30d: 1200000, collection_value: 4340000, collection_rate: 65, outstanding_vs_primary: 39 },
-  { distributor_id: 'DB-004', name: 'Verma & Sons', district: 'Kanpur', period: '2026-03', total_outstanding: 1900000, outstanding_gt30d: 1045000, outstanding_lt30d: 855000, collection_value: 2460000, collection_rate: 58, outstanding_vs_primary: 46 },
-  { distributor_id: 'DB-006', name: 'Kumar Enterprises', district: 'Varanasi', period: '2026-03', total_outstanding: 1600000, outstanding_gt30d: 880000, outstanding_lt30d: 720000, collection_value: 1920000, collection_rate: 55, outstanding_vs_primary: 50 },
-  { distributor_id: 'DB-003', name: 'Singh Traders', district: 'Kanpur', period: '2026-03', total_outstanding: 900000, outstanding_gt30d: 270000, outstanding_lt30d: 630000, collection_value: 4590000, collection_rate: 82, outstanding_vs_primary: 17 },
-  { distributor_id: 'DB-005', name: 'Patel Distribution', district: 'Agra', period: '2026-03', total_outstanding: 750000, outstanding_gt30d: 225000, outstanding_lt30d: 525000, collection_value: 3230000, collection_rate: 80, outstanding_vs_primary: 20 },
+  { mm_id: 'MM-N2-001', distributor_id: 'DB-001', name: 'Sharma Distributors', district: 'Lucknow', period: '2026-03', total_outstanding: 2800000, outstanding_gt30d: 1120000, outstanding_lt30d: 1680000, collection_value: 6120000, collection_rate: 72, outstanding_vs_primary: 33 },
+  { mm_id: 'MM-N2-001', distributor_id: 'DB-002', name: 'Gupta Agencies', district: 'Lucknow', period: '2026-03', total_outstanding: 2400000, outstanding_gt30d: 1200000, outstanding_lt30d: 1200000, collection_value: 4340000, collection_rate: 65, outstanding_vs_primary: 39 },
+  { mm_id: 'MM-N2-002', distributor_id: 'DB-004', name: 'Verma & Sons', district: 'Kanpur', period: '2026-03', total_outstanding: 1900000, outstanding_gt30d: 1045000, outstanding_lt30d: 855000, collection_value: 2460000, collection_rate: 58, outstanding_vs_primary: 46 },
+  { mm_id: 'MM-N2-004', distributor_id: 'DB-006', name: 'Kumar Enterprises', district: 'Varanasi', period: '2026-03', total_outstanding: 1600000, outstanding_gt30d: 880000, outstanding_lt30d: 720000, collection_value: 1920000, collection_rate: 55, outstanding_vs_primary: 50 },
+  { mm_id: 'MM-N2-002', distributor_id: 'DB-003', name: 'Singh Traders', district: 'Kanpur', period: '2026-03', total_outstanding: 900000, outstanding_gt30d: 270000, outstanding_lt30d: 630000, collection_value: 4590000, collection_rate: 82, outstanding_vs_primary: 17 },
+  { mm_id: 'MM-N2-003', distributor_id: 'DB-005', name: 'Patel Distribution', district: 'Agra', period: '2026-03', total_outstanding: 750000, outstanding_gt30d: 225000, outstanding_lt30d: 525000, collection_value: 3230000, collection_rate: 80, outstanding_vs_primary: 20 },
 ];
 
 // --- L2 UNTAPPED POTENTIAL ---
@@ -195,6 +201,11 @@ export const trendData = {
     { month: 'Feb 26', nd_gap: -8.9, extraction_gap: -11.5, pipeline_gap: -0.12 },
     { month: 'Mar 26', nd_gap: -9.8, extraction_gap: -12, pipeline_gap: -0.13 },
   ],
+  wsp_trend: [
+    { month: 'Oct', wsp: 3840, bench: 5200 }, { month: 'Nov', wsp: 3720, bench: 5200 },
+    { month: 'Dec', wsp: 3610, bench: 5200 }, { month: 'Jan', wsp: 3480, bench: 5200 },
+    { month: 'Feb', wsp: 3350, bench: 5200 }, { month: 'Mar', wsp: 3200, bench: 5200 },
+  ],
 };
 
 // ============================================================
@@ -208,7 +219,7 @@ export const driftFindings = [
     rule_name: 'Reach Erosion',
     geo_level: 'district', geo_id: 'Kanpur', geo_ancestors: { zone: 'North', region: 'North-2', state: 'UP' },
     metric_name: 'ND%', current_value: 48.6, comparison_value: 55.2, drift_magnitude: -6.6, drift_direction: 'down',
-    causal_dims: { channel: 'GT', category: 'All', outlet_class: 'FLP+OLP', territory_owner: 'ASM Priya Mehta', distributor: 'Gupta Agencies' },
+    causal_dims: { channel: 'GT', category: 'All', outlet_class: 'FLP+OLP', territory_owner: 'ASM Priya Mehta', distributor: 'Gupta Agencies', distributor_id: 'DB-002' },
     period_start: '2026-01', period_end: '2026-03', consecutive_periods: 3,
     summary_text: 'Kanpur GT ND% dropped 6.6pp vs SPLY over 3 consecutive months. Outlet churn concentrated in FLP and OLP town classes. 65 outlets lost, only 22 added.',
     target_screen: 'S-01', status: 'new',
@@ -228,7 +239,7 @@ export const driftFindings = [
     rule_name: 'Pipeline Stuffing',
     geo_level: 'region', geo_id: 'North-2', geo_ancestors: { zone: 'North', region: 'North-2' },
     metric_name: 'Sec:Pri Ratio', current_value: 0.69, comparison_value: 0.87, drift_magnitude: -18, drift_direction: 'down',
-    causal_dims: { channel: 'All', category: 'All', outlet_class: 'All', territory_owner: 'RSM Rajesh Sharma', distributor: 'Gupta Agencies, Verma & Sons, Kumar Enterprises' },
+    causal_dims: { channel: 'All', category: 'All', outlet_class: 'All', territory_owner: 'RSM Rajesh Sharma', distributor: 'Gupta Agencies, Verma & Sons, Kumar Enterprises', distributor_ids: ['DB-002', 'DB-004', 'DB-006'] },
     period_start: '2025-12', period_end: '2026-03', consecutive_periods: 4,
     summary_text: 'North-2 Sec:Pri ratio dropped from 87% to 69% in 4 months. Primary up 12-25% SALY while secondary declining 8-18%. 3 distributors (Gupta, Verma, Kumar) show Sec:Pri <65%. Pattern correlates with Q4 scheme loading.',
     target_screen: 'S-03', status: 'new',
@@ -258,7 +269,7 @@ export const driftFindings = [
     rule_name: 'Promo Underperformance',
     geo_level: 'district', geo_id: 'Varanasi', geo_ancestors: { zone: 'North', region: 'North-2', state: 'UP' },
     metric_name: 'Promo Uplift', current_value: 5, comparison_value: 15, drift_magnitude: -10, drift_direction: 'down',
-    causal_dims: { channel: 'GT', category: 'Hair Care', outlet_class: 'FLP', territory_owner: 'ASM Rahul Singh', distributor: 'Kumar Enterprises' },
+    causal_dims: { channel: 'GT', category: 'Hair Care', outlet_class: 'FLP', territory_owner: 'ASM Rahul Singh', distributor: 'Kumar Enterprises', distributor_id: 'DB-006' },
     period_start: '2026-02', period_end: '2026-03', consecutive_periods: 1,
     summary_text: 'Rural Penetration Scheme (SCH-003) in Varanasi showing only 5% uplift vs 15% target at midpoint. Participation rate at 30% — 70% of eligible outlets not participating. ROI at 0.7x.',
     target_screen: 'S-06', status: 'new',
@@ -288,7 +299,7 @@ export const driftFindings = [
     rule_name: 'Outstanding Concentration',
     geo_level: 'distributor', geo_id: 'DB-006', geo_ancestors: { zone: 'North', region: 'North-2', district: 'Varanasi' },
     metric_name: 'Outstanding:Primary', current_value: 50, comparison_value: 30, drift_magnitude: 20, drift_direction: 'up',
-    causal_dims: { distributor: 'Kumar Enterprises' },
+    causal_dims: { distributor: 'Kumar Enterprises', distributor_id: 'DB-006' },
     period_start: '2026-01', period_end: '2026-03', consecutive_periods: 3,
     summary_text: 'Kumar Enterprises (Varanasi) outstanding:primary ratio at 50% — well above 30% threshold. >30d outstanding at ₹8.8L growing. Collection rate at 55%, declining from 72% 3 months ago.',
     target_screen: 'S-08', status: 'new',
@@ -339,7 +350,7 @@ export const driftFindings = [
     rule_name: 'Promo Course-Correction',
     geo_level: 'district', geo_id: 'Varanasi', geo_ancestors: { zone: 'North', region: 'North-2', state: 'UP' },
     metric_name: 'Participation Rate', current_value: 30, comparison_value: 60, drift_magnitude: -30, drift_direction: 'down',
-    causal_dims: { category: 'Hair Care', distributor: 'Kumar Enterprises' },
+    causal_dims: { category: 'Hair Care', distributor: 'Kumar Enterprises', distributor_id: 'DB-006' },
     period_start: '2026-03', period_end: '2026-03', consecutive_periods: 1,
     summary_text: 'Rural Penetration Scheme in Varanasi needs mid-course correction. Participation at 30% vs 60% target. Eligibility criteria may be too restrictive for FLP outlets.',
     target_screen: 'S-06', target_action: { module: 'M05', agent: 'Scheme Design Engine', action_type: 'scheme_adjustment' }, status: 'new',
