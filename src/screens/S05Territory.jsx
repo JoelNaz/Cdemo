@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell, CartesianGrid, Legend } from 'recharts';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid, ReferenceLine, Legend } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
-import { l2Territory, driftFindings } from '../data/mockData';
+import MapPanel from '../components/MapPanel';
+import ScopeSelector from '../components/ScopeSelector';
+import { l2Territory, driftFindings, trendData } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
@@ -46,10 +48,11 @@ export default function S05Territory() {
   return (
     <div className="screen">
       <div className="screen-header">
-        <div>
+        <div className="flex-1">
           <div className="screen-id">S-05</div>
           <h2 className="screen-title">Territory & SFA Health</h2>
-          <div className="screen-subtitle">Visit compliance, MAU, beat productivity · North-2 · March 2026</div>
+          <div className="screen-subtitle">Visit compliance, MAU, beat productivity · March 2026</div>
+          <div className="mt-2"><ScopeSelector /></div>
         </div>
       </div>
 
@@ -105,8 +108,18 @@ export default function S05Territory() {
         </div>
       </div>
 
-      <div className="section-label" style={{ marginTop: 24 }}>Beat-Level Breakdown</div>
-      <DataTable columns={tableColumns} data={l2Territory} />
+      <div className="two-col" style={{ marginTop: 24 }}>
+        <div>
+          <div className="section-label">Beat-Level Breakdown</div>
+          <DataTable columns={tableColumns} data={l2Territory} />
+        </div>
+        <div>
+          <div className="section-label">Spatial Panel — Beat Productivity Map</div>
+          <div className="relative">
+            <MapPanel metric="visit_compliance" height={380} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

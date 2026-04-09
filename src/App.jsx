@@ -1,20 +1,27 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppProvider } from './context/AppContext';
 import Sidebar from './components/Sidebar';
 import ChatBot from './components/ChatBot';
+import ContextualDetailPanel from './components/ContextualDetailPanel';
 import './index.css';
 
-const S00Landing   = lazy(() => import('./screens/S00Landing'));
-const S01Reach     = lazy(() => import('./screens/S01Reach'));
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000 } },
+});
+
+const S00Landing    = lazy(() => import('./screens/S00Landing'));
+const S01Reach      = lazy(() => import('./screens/S01Reach'));
 const S02Extraction = lazy(() => import('./screens/S02Extraction'));
-const S03Pipeline  = lazy(() => import('./screens/S03Pipeline'));
-const S04Channel   = lazy(() => import('./screens/S04Channel'));
-const S05Territory = lazy(() => import('./screens/S05Territory'));
-const S06Promo     = lazy(() => import('./screens/S06Promo'));
-const S07Benchmark = lazy(() => import('./screens/S07Benchmark'));
-const S08Outstanding = lazy(() => import('./screens/S08Outstanding'));
-const S09Untapped  = lazy(() => import('./screens/S09Untapped'));
+const S03Pipeline   = lazy(() => import('./screens/S03Pipeline'));
+const S04Channel    = lazy(() => import('./screens/S04Channel'));
+const S05Territory  = lazy(() => import('./screens/S05Territory'));
+const S06Promo      = lazy(() => import('./screens/S06Promo'));
+const S07Benchmark  = lazy(() => import('./screens/S07Benchmark'));
+const S08Outstanding= lazy(() => import('./screens/S08Outstanding'));
+const S09Untapped   = lazy(() => import('./screens/S09Untapped'));
+const WarRoom       = lazy(() => import('./screens/WarRoom'));
 
 function ScreenFallback() {
   return (
@@ -54,21 +61,25 @@ function AppLayout() {
             <Route path="/benchmark" element={<S07Benchmark />} />
             <Route path="/outstanding" element={<S08Outstanding />} />
             <Route path="/untapped" element={<S09Untapped />} />
+            <Route path="/war-room" element={<WarRoom />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>
       <ChatBot />
+      <ContextualDetailPanel />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppProvider>
-        <AppLayout />
-      </AppProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppProvider>
+          <AppLayout />
+        </AppProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }

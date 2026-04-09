@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine, CartesianGrid, LabelList } from 'recharts';
+import { ComposedChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine, CartesianGrid, LabelList, BarChart } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
@@ -7,12 +7,34 @@ import { l2Promo, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, chartCardClass, chartCardStyle } from '../utils/chartUtils';
 
-const waterfallData = [
-  { name: 'Baseline', value: 4200000, fill: 'var(--info)' },
-  { name: 'Target Uplift', value: 630000, fill: 'var(--success)' },
-  { name: 'Actual Uplift', value: 84000, fill: 'var(--warning)' },
-  { name: 'Shortfall', value: -546000, fill: 'var(--critical)' },
+const RAW_WATERFALL = [
+  { name: 'Baseline',     value: 4200000 },
+  { name: 'Target Uplift',value:  630000 },
+  { name: 'Actual Uplift',value:   84000 },
+  { name: 'Shortfall',    value: -546000 },
 ];
+
+const buildWaterfall = (items) => {
+  let running = 0;
+  return items.map((item, i) => {
+    const isFirst = i === 0;
+    const isNeg   = item.value < 0;
+    const base    = isFirst ? 0 : running;
+    const barVal  = Math.abs(item.value);
+    const bottom  = isNeg ? running + item.value : running;
+    running += item.value;
+    return {
+      ...item,
+      base: isFirst ? 0 : bottom,
+      bar: barVal,
+      total: running,
+      color: isFirst ? 'var(--info)' : isNeg ? 'var(--critical)' : (i === 2 ? 'var(--warning)' : 'var(--success)'),
+      isFirst,
+    };
+  });
+};
+
+const waterfallData = buildWaterfall(RAW_WATERFALL);
 
 const kpis = [
   { label: 'Active Schemes', value: 3, comparison: 'Across 8 districts' },
@@ -65,16 +87,36 @@ export default function S06Promo() {
           <div className="section-label">Uplift Waterfall — Rural Penetration Scheme</div>
           <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={waterfallData} margin={{ top: 24, right: 12, left: -10, bottom: 0 }}>
+              <ComposedChart data={waterfallData} margin={{ top: 24, right: 16, left: -4, bottom: 0 }}>
                 <CartesianGrid {...gridProps} />
                 <XAxis dataKey="name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
-                <YAxis {...yAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickFormatter={v => `₹${(Math.abs(v) / 100000).toFixed(1)}L`} />
-                <Tooltip contentStyle={ttStyle} formatter={v => [`₹${(Math.abs(v) / 100000).toFixed(1)}L`, '']} />
-                <Bar dataKey="value" radius={6} maxBarSize={52}>
-                  {waterfallData.map((d, i) => <Cell key={i} fill={d.fill} />)}
-                  <LabelList dataKey="value" position="top" style={{ fill: 'var(--text-secondary)', fontSize: 10 }} formatter={v => `₹${(Math.abs(v) / 100000).toFixed(1)}L`} />
+                <YAxis
+                  {...yAxisProps}
+                  tick={{ fill: 'var(--text-muted)', fontSize: 10 }}
+                  tickFormatter={v => `₹${(v / 100000).toFixed(0)}L`}
+                  domain={[0, 5200000]}
+                />
+                <Tooltip
+                  contentStyle={ttStyle}
+                  formatter={(v, name, props) => {
+                    if (name === 'base') return null;
+                    const d = props.payload;
+                    return [`₹${(d.bar / 100000).toFixed(1)}L`, d.name];
+                  }}
+                />
+                {/* Invisible base — pushes floating bar up */}
+                <Bar dataKey="base" stackId="w" fill="transparent" isAnimationActive={false} />
+                {/* Visible floating bar */}
+                <Bar dataKey="bar" stackId="w" radius={[5, 5, 0, 0]} maxBarSize={56} isAnimationActive>
+                  {waterfallData.map((d, i) => <Cell key={i} fill={d.color} />)}
+                  <LabelList
+                    dataKey="bar"
+                    position="top"
+                    style={{ fill: 'var(--text-secondary)', fontSize: 10 }}
+                    formatter={v => `₹${(v / 100000).toFixed(1)}L`}
+                  />
                 </Bar>
-              </BarChart>
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         </div>

@@ -357,6 +357,141 @@ export const driftFindings = [
   },
 ];
 
+// --- DATA REFRESH ---
+export const dataRefreshDate = '2026-04-07';
+export const dataRefreshLabel = 'Refreshed 7 Apr 2026, 02:14 IST';
+
+// --- DISTRICT GEO COORDINATES (for Leaflet map) ---
+export const districtGeo = {
+  Lucknow:    { lat: 26.85, lng: 80.95, nd_pct: 59.0, extraction_rate: 72, visit_compliance: 76.7 },
+  Kanpur:     { lat: 26.45, lng: 80.33, nd_pct: 48.6, extraction_rate: 68, visit_compliance: 72.5 },
+  Agra:       { lat: 27.18, lng: 78.01, nd_pct: 47.3, extraction_rate: 64, visit_compliance: 64.0 },
+  Varanasi:   { lat: 25.32, lng: 82.97, nd_pct: 41.1, extraction_rate: 58, visit_compliance: 70.6 },
+  Allahabad:  { lat: 25.43, lng: 81.84, nd_pct: 38.8, extraction_rate: 49, visit_compliance: 68.0 },
+  Meerut:     { lat: 28.98, lng: 77.71, nd_pct: 40.0, extraction_rate: 56, visit_compliance: 70.5 },
+  Bareilly:   { lat: 28.35, lng: 79.43, nd_pct: 35.0, extraction_rate: 52, visit_compliance: 65.0 },
+  Gorakhpur:  { lat: 26.76, lng: 83.37, nd_pct: 30.9, extraction_rate: 42, visit_compliance: 60.0 },
+};
+
+// --- KPI CONTEXTUAL DECOMPOSITION DATA (for Contextual Detail Panel) ---
+export const kpiContextualData = {
+  'ND%': {
+    metric: 'ND%', unit: '%', current: 42.3, sply: 47.1, delta: -4.8,
+    description: 'Numeric Distribution — % of viable outlets actively billed in the period',
+    spatial: [
+      { geo: 'Lucknow', value: 59.0, delta: -3.2, status: 'ok' },
+      { geo: 'Kanpur', value: 48.6, delta: -6.6, status: 'warn' },
+      { geo: 'Agra', value: 47.3, delta: -5.1, status: 'warn' },
+      { geo: 'Varanasi', value: 41.1, delta: -7.2, status: 'critical' },
+      { geo: 'Allahabad', value: 38.8, delta: -8.9, status: 'critical' },
+      { geo: 'Meerut', value: 40.0, delta: -5.5, status: 'critical' },
+      { geo: 'Bareilly', value: 35.0, delta: -6.8, status: 'critical' },
+      { geo: 'Gorakhpur', value: 30.9, delta: -7.1, status: 'critical' },
+    ],
+    temporal: [
+      { month: 'Oct', value: 47.1 }, { month: 'Nov', value: 46.2 },
+      { month: 'Dec', value: 45.5 }, { month: 'Jan', value: 44.8 },
+      { month: 'Feb', value: 43.6 }, { month: 'Mar', value: 42.3 },
+    ],
+    causal: [
+      { driver: 'Outlet Churn (FLP+OLP)', contribution: -2.8, direction: 'down' },
+      { driver: 'New Additions Below Target', contribution: -1.4, direction: 'down' },
+      { driver: 'Beat Coverage Gaps', contribution: -0.6, direction: 'down' },
+    ],
+  },
+  'Total Revenue': {
+    metric: 'Total Revenue', unit: '₹Cr', current: 6.8, sply: 8.5, delta: -20,
+    description: 'Gross Secondary Value across all channels and categories',
+    spatial: [
+      { geo: 'Lucknow', value: 1.92, delta: -12, status: 'warn' },
+      { geo: 'Kanpur', value: 1.48, delta: -18, status: 'critical' },
+      { geo: 'Agra', value: 1.12, delta: -15, status: 'warn' },
+      { geo: 'Varanasi', value: 0.82, delta: -24, status: 'critical' },
+      { geo: 'Allahabad', value: 0.62, delta: -28, status: 'critical' },
+      { geo: 'Meerut', value: 0.48, delta: -20, status: 'critical' },
+    ],
+    temporal: [
+      { month: 'Oct', value: 8.5 }, { month: 'Nov', value: 8.2 },
+      { month: 'Dec', value: 7.9 }, { month: 'Jan', value: 7.5 },
+      { month: 'Feb', value: 7.1 }, { month: 'Mar', value: 6.8 },
+    ],
+    causal: [
+      { driver: 'ND% Decline', contribution: -1.2, direction: 'down' },
+      { driver: 'WSP/Outlet Drop', contribution: -0.8, direction: 'down' },
+      { driver: 'Pipeline Stuffing (Sec↓)', contribution: -0.9, direction: 'down' },
+      { driver: 'GT→MT Channel Shift', contribution: 0.2, direction: 'up' },
+    ],
+  },
+  'Sec:Pri Ratio': {
+    metric: 'Sec:Pri Ratio', unit: '', current: 0.69, sply: 0.87, delta: -20.7,
+    description: 'Secondary-to-Primary ratio — measures pipeline health, secondary sell-through',
+    spatial: [
+      { geo: 'Sharma Distributors', value: 0.69, delta: -21, status: 'warn' },
+      { geo: 'Gupta Agencies', value: 0.60, delta: -29, status: 'critical' },
+      { geo: 'Singh Traders', value: 0.75, delta: -14, status: 'ok' },
+      { geo: 'Verma & Sons', value: 0.60, delta: -28, status: 'critical' },
+      { geo: 'Kumar Enterprises', value: 0.60, delta: -31, status: 'critical' },
+    ],
+    temporal: [
+      { month: 'Oct', value: 0.87 }, { month: 'Nov', value: 0.83 },
+      { month: 'Dec', value: 0.79 }, { month: 'Jan', value: 0.75 },
+      { month: 'Feb', value: 0.72 }, { month: 'Mar', value: 0.69 },
+    ],
+    causal: [
+      { driver: 'Q4 Primary Loading (Scheme)', contribution: -0.12, direction: 'down' },
+      { driver: 'Secondary Sell-Through Low', contribution: -0.06, direction: 'down' },
+    ],
+  },
+  'Collection Rate': {
+    metric: 'Collection Rate', unit: '%', current: 72.4, sply: 81.3, delta: -8.9,
+    description: 'Collections as % of billing — measures credit health of distributor network',
+    spatial: [
+      { geo: 'Sharma Distributors', value: 72, delta: -10, status: 'warn' },
+      { geo: 'Gupta Agencies', value: 65, delta: -15, status: 'critical' },
+      { geo: 'Singh Traders', value: 82, delta: 2, status: 'ok' },
+      { geo: 'Kumar Enterprises', value: 55, delta: -20, status: 'critical' },
+      { geo: 'Patel Distribution', value: 80, delta: -3, status: 'ok' },
+    ],
+    temporal: [
+      { month: 'Oct', value: 81.3 }, { month: 'Nov', value: 79.8 },
+      { month: 'Dec', value: 78.2 }, { month: 'Jan', value: 76.5 },
+      { month: 'Feb', value: 74.1 }, { month: 'Mar', value: 72.4 },
+    ],
+    causal: [
+      { driver: 'Outstanding Concentration (Kumar)', contribution: -4.2, direction: 'down' },
+      { driver: 'Ageing >30d Growing', contribution: -2.8, direction: 'down' },
+      { driver: 'Visit Frequency Drop', contribution: -1.9, direction: 'down' },
+    ],
+  },
+  'SFA MAU': {
+    metric: 'SFA MAU', unit: '%', current: 78, sply: 86, delta: -8,
+    description: 'Monthly Active Users of SFA app — proxy for field execution discipline',
+    spatial: [
+      { geo: 'Lucknow', value: 82, delta: -4, status: 'ok' },
+      { geo: 'Kanpur', value: 75, delta: -9, status: 'warn' },
+      { geo: 'Agra', value: 68, delta: -14, status: 'critical' },
+      { geo: 'Varanasi', value: 75, delta: -8, status: 'warn' },
+    ],
+    temporal: [
+      { month: 'Oct', value: 86 }, { month: 'Nov', value: 84 },
+      { month: 'Dec', value: 83 }, { month: 'Jan', value: 81 },
+      { month: 'Feb', value: 79 }, { month: 'Mar', value: 78 },
+    ],
+    causal: [
+      { driver: 'Agra Beat Productivity Drop', contribution: -4.5, direction: 'down' },
+      { driver: 'Kanpur MAU Decline', contribution: -2.2, direction: 'down' },
+      { driver: 'PJP MAU Divergence', contribution: -1.3, direction: 'down' },
+    ],
+  },
+};
+
+// --- WAR ROOM EXERCISES ---
+export const warRoomExercises = [
+  { id: 'EX-001', title: 'Kanpur Outlet Recovery Drive', type: 'beat_redesign', status: 'in_progress', owner: 'ASM Priya Mehta', finding_ids: ['F-001', 'F-008'], created: '2026-03-15', target_date: '2026-04-30', disseminated: false, notes: 'Beat geometry review underway. Targeting 80 outlet re-additions by April end.' },
+  { id: 'EX-002', title: 'North-2 Pipeline Correction', type: 'distributor_action', status: 'pending', owner: 'RSM Rajesh Sharma', finding_ids: ['F-003'], created: '2026-03-20', target_date: '2026-04-15', disseminated: false, notes: 'Joint review with Gupta, Verma, Kumar distributors scheduled.' },
+  { id: 'EX-003', title: 'Allahabad Expansion Targeting', type: 'expansion', status: 'pending', owner: 'ASM Rahul Singh', finding_ids: ['F-011'], created: '2026-03-28', target_date: '2026-05-31', disseminated: false, notes: '490 target outlets mapped. SD appointment under review.' },
+];
+
 // --- SCREEN DEFINITIONS ---
 export const screenDefinitions = {
   'S-00': { id: 'S-00', name: 'Landing', description: 'Drift findings feed + summary KPIs', icon: 'LayoutDashboard', path: '/' },

@@ -3,6 +3,8 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContai
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
+import MapPanel from '../components/MapPanel';
+import ScopeSelector from '../components/ScopeSelector';
 import { l2Reach, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
@@ -53,10 +55,11 @@ export default function S01Reach() {
   return (
     <div className="screen">
       <div className="screen-header">
-        <div>
+        <div className="flex-1">
           <div className="screen-id">S-01</div>
           <h2 className="screen-title">Reach Health</h2>
-          <div className="screen-subtitle">ND%, GEO ECO, outlet funnel, churn analysis · North-2 · March 2026</div>
+          <div className="screen-subtitle">ND%, GEO ECO, outlet funnel, churn analysis · March 2026</div>
+          <div className="mt-2"><ScopeSelector /></div>
         </div>
       </div>
 
@@ -106,8 +109,18 @@ export default function S01Reach() {
         </div>
       </div>
 
-      <div className="section-label" style={{ marginTop: 24 }}>District-Level Reach Breakdown</div>
-      <DataTable columns={tableColumns} data={l2Reach} highlightRules={highlightRules} />
+      <div className="two-col" style={{ marginTop: 24 }}>
+        <div>
+          <div className="section-label">District-Level Reach Breakdown</div>
+          <DataTable columns={tableColumns} data={l2Reach} highlightRules={highlightRules} />
+        </div>
+        <div>
+          <div className="section-label">Spatial Panel — ND% by District</div>
+          <div className="relative">
+            <MapPanel metric="nd_pct" height={380} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

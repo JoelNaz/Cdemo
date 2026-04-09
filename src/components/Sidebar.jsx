@@ -1,8 +1,7 @@
-import { useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Target, TrendingUp, GitBranch, PieChart,
-  Map, Zap, BarChart3, Wallet, Radar, Sun, Moon,
+  Map, Zap, BarChart3, Wallet, Radar, Sun, Moon, Siren,
 } from 'lucide-react';
 import { screenDefinitions, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
@@ -22,7 +21,7 @@ const findingsBadge = driftFindings.reduce((acc, f) => {
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, trackScreenVisit, theme, toggleTheme } = useApp();
+  const { user, trackScreenVisit, theme, toggleTheme, warRoomQueue } = useApp();
 
   const screens = Object.values(screenDefinitions);
 
@@ -30,6 +29,8 @@ export default function Sidebar() {
     trackScreenVisit(screen.id);
     navigate(screen.path);
   };
+
+  const warRoomCount = warRoomQueue.size;
 
   return (
     <nav
@@ -89,6 +90,34 @@ export default function Sidebar() {
             </div>
           );
         })}
+
+        {/* Divider */}
+        <div className="border-t border-[var(--border)] my-2 mx-1" />
+
+        {/* War Room link */}
+        <div
+          onClick={() => navigate('/war-room')}
+          className={[
+            'relative flex items-center gap-2.5 px-3 py-[9px] rounded-lg cursor-pointer transition-colors mb-px text-[12.5px]',
+            location.pathname === '/war-room'
+              ? 'bg-[var(--critical-bg)] text-[var(--critical)] font-semibold'
+              : 'text-[var(--text-secondary)] font-medium hover:bg-[var(--bg-hover)] hover:text-[var(--critical)]',
+          ].join(' ')}
+        >
+          {location.pathname === '/war-room' && (
+            <span className="absolute left-0 top-[7px] bottom-[7px] w-[2.5px] rounded-sm bg-[var(--critical)]" />
+          )}
+          <span className="text-[9px] font-bold text-[var(--text-muted)] min-w-[28px]" style={{ fontFamily: "'DM Mono', monospace" }}>
+            W-00
+          </span>
+          <Siren className="w-[18px] h-[18px] flex-shrink-0" />
+          <span className="flex-1">War Room</span>
+          {warRoomCount > 0 && (
+            <span className="text-[9px] font-extrabold min-w-[17px] h-[17px] flex items-center justify-center rounded-full px-1 flex-shrink-0 bg-[var(--critical-bg)] text-[var(--critical)]">
+              {warRoomCount}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* User footer */}

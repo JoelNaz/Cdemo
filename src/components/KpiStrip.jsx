@@ -1,14 +1,26 @@
+import { useApp } from '../context/AppContext';
+import { kpiContextualData } from '../data/mockData';
+
 export default function KpiStrip({ kpis }) {
+  const { openContextPanel } = useApp();
+
   return (
     <div
       className="grid gap-2.5 mb-[22px]"
       style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(172px, 1fr))' }}
     >
-      {kpis.map((kpi, i) => (
+      {kpis.map((kpi, i) => {
+        const hasContext = !!kpiContextualData[kpi.label];
+        return (
         <div
           key={i}
-          className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4 transition-[border-color,box-shadow] hover:border-[var(--border-light)]"
+          onClick={() => hasContext && openContextPanel(kpi.label)}
+          className={[
+            'bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4 transition-[border-color,box-shadow,transform]',
+            hasContext ? 'cursor-pointer hover:border-[var(--accent)] hover:shadow-[0_0_0_1px_var(--accent)] hover:-translate-y-px' : 'hover:border-[var(--border-light)]',
+          ].join(' ')}
           style={{ boxShadow: 'var(--card-shadow)' }}
+          title={hasContext ? `Click for ${kpi.label} breakdown` : undefined}
         >
           <div className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-[0.9px] mb-2">
             {kpi.label}
@@ -38,8 +50,14 @@ export default function KpiStrip({ kpis }) {
               />
             </div>
           )}
+          {hasContext && (
+            <div className="mt-2 text-[9px] font-semibold text-[var(--accent)] opacity-60 uppercase tracking-[0.8px]">
+              Click to drill down ↗
+            </div>
+          )}
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

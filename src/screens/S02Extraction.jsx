@@ -3,9 +3,80 @@ import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContai
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
+import MapPanel from '../components/MapPanel';
+import ScopeSelector from '../components/ScopeSelector';
 import { l2Extraction, driftFindings, trendData } from '../data/mockData';
 import { useApp } from '../context/AppContext';
 import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
+
+const HEATMAP_CATEGORIES = ['Hair Care', 'Skin Care'];
+const HEATMAP_DISTRICTS = ['Lucknow', 'Kanpur', 'Agra', 'Varanasi', 'Allahabad', 'Meerut', 'Bareilly', 'Gorakhpur'];
+
+function buildHeatmap(data) {
+  const map = {};
+  data.forEach(row => {
+    if (!map[row.district]) map[row.district] = {};
+    map[row.district][row.category] = {
+      extraction_rate: row.extraction_rate,
+      benchmark: row.benchmark_extraction,
+      gap: row.extraction_rate - row.benchmark_extraction,
+    };
+  });
+  return map;
+}
+
+function gapColor(gap) {
+  if (gap >= 0) return { bg: 'rgba(34,197,94,0.18)', text: 'var(--success)' };
+  if (gap >= -15) return { bg: 'rgba(245,158,11,0.18)', text: 'var(--warning)' };
+  if (gap >= -30) return { bg: 'rgba(239,68,68,0.18)', text: 'var(--critical)' };
+  return { bg: 'rgba(127,29,29,0.35)', text: '#fca5a5' };
+}
+
+function ExtractionHeatmap({ data }) {
+  const hmap = buildHeatmap(data);
+  const cats = HEATMAP_CATEGORIES;
+  return (
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl overflow-hidden" style={{ boxShadow: 'var(--card-shadow)' }}>
+      <table className="w-full border-collapse text-[11px]">
+        <thead>
+          <tr>
+            <th className="text-left px-3 py-2 bg-[var(--bg-tertiary)] text-[var(--text-muted)] font-bold text-[9px] uppercase tracking-[0.8px] border-b border-[var(--border)]">District</th>
+            {cats.map(c => (
+              <th key={c} className="text-center px-3 py-2 bg-[var(--bg-tertiary)] text-[var(--text-muted)] font-bold text-[9px] uppercase tracking-[0.8px] border-b border-[var(--border)]">
+                {c}
+                <div className="text-[8px] font-normal normal-case tracking-normal opacity-70">Gap vs 88% bench</div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {HEATMAP_DISTRICTS.map((district, ri) => (
+            <tr key={district}>
+              <td className="px-3 py-2 font-semibold text-[var(--text-primary)] border-b border-[var(--border)] last:border-0 text-[11px]">{district}</td>
+              {cats.map(cat => {
+                const cell = hmap[district]?.[cat];
+                if (!cell) return (
+                  <td key={cat} className="px-3 py-2 text-center text-[var(--text-muted)] border-b border-[var(--border)] text-[10px]">—</td>
+                );
+                const { bg, text } = gapColor(cell.gap);
+                return (
+                  <td key={cat} className="px-3 py-2 text-center border-b border-[var(--border)]" style={{ background: bg }}>
+                    <div className="font-bold text-[12px] [font-variant-numeric:tabular-nums]" style={{ color: text }}>
+                      {cell.extraction_rate}%
+                    </div>
+                    <div className="text-[9.5px] font-medium" style={{ color: text, opacity: 0.8 }}>
+                      {cell.gap >= 0 ? '+' : ''}{cell.gap}pp
+                    </div>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 const kpis = [
   { label: 'WD%', value: 61.7, format: 'pct', delta: -3.5, deltaUnit: 'pp vs SPLY', comparison: 'SPLY: 65.2%' },
@@ -49,10 +120,11 @@ export default function S02Extraction() {
   return (
     <div className="screen">
       <div className="screen-header">
-        <div>
+        <div className="flex-1">
           <div className="screen-id">S-02</div>
           <h2 className="screen-title">Extraction Health</h2>
-          <div className="screen-subtitle">WD%, WSP/outlet, extraction vs benchmark · North-2 · March 2026</div>
+          <div className="screen-subtitle">WD%, WSP/outlet, extraction vs benchmark · March 2026</div>
+          <div className="mt-2"><ScopeSelector /></div>
         </div>
       </div>
 
@@ -124,7 +196,20 @@ export default function S02Extraction() {
         </div>
       </div>
 
-      <div className="section-label" style={{ marginTop: 24 }}>District × Category Extraction Matrix</div>
+      <div className="two-col" style={{ marginTop: 24 }}>
+        <div>
+          <div className="section-label">Extraction Gap Heatmap — District × Category</div>
+          <ExtractionHeatmap data={l2Extraction} />
+        </div>
+        <div>
+          <div className="section-label">Spatial Panel — Extraction Rate by District</div>
+          <div className="relative">
+            <MapPanel metric="extraction_rate" height={340} />
+          </div>
+        </div>
+      </div>
+
+      <div className="section-label" style={{ marginTop: 24 }}>District × Category Extraction Detail</div>
       <DataTable columns={tableColumns} data={l2Extraction} />
     </div>
   );
