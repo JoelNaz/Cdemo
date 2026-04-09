@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell, CartesianGrid, Legend } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Outstanding, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const tripleLineTrend = [
   { month: 'Oct', outstanding: 8.2, collection: 7.6, primary: 18.4 },
@@ -39,7 +40,6 @@ const tableColumns = [
   )},
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S08Outstanding() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -68,29 +68,37 @@ export default function S08Outstanding() {
       <div className="two-col">
         <div>
           <div className="section-label">Outstanding vs Collection vs Primary — 6 Months</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 210, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={tripleLineTrend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={tripleLineTrend} margin={{ top: 12, right: 12, left: -10, bottom: 0 }}>
+                <defs>
+                  <GradFill id="gradOutstanding" color="var(--critical)" startOpacity={0.25} />
+                  <GradFill id="gradCollection" color="var(--success)" startOpacity={0.2} />
+                  <GradFill id="gradPrimary" color="var(--info)" startOpacity={0.15} />
+                </defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis {...yAxisProps} tickFormatter={v => `₹${v}L`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`₹${v}L`, '']} />
-                <Line type="monotone" dataKey="outstanding" stroke="var(--critical)" strokeWidth={2} dot={{ r: 3, fill: 'var(--critical)' }} name="Outstanding" />
-                <Line type="monotone" dataKey="collection" stroke="var(--success)" strokeWidth={2} dot={{ r: 3, fill: 'var(--success)' }} name="Collection" />
-                <Line type="monotone" dataKey="primary" stroke="var(--info)" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Primary" />
-              </LineChart>
+                <Legend wrapperStyle={legendWrapperStyle} iconType="circle" iconSize={8} />
+                <Area type="monotone" dataKey="outstanding" stroke="var(--critical)" strokeWidth={2.5} fill="url(#gradOutstanding)" dot={{ r: 3.5, fill: 'var(--critical)', strokeWidth: 0 }} activeDot={activeDot('var(--critical)')} name="Outstanding" />
+                <Area type="monotone" dataKey="collection" stroke="var(--success)" strokeWidth={2.5} fill="url(#gradCollection)" dot={{ r: 3.5, fill: 'var(--success)', strokeWidth: 0 }} activeDot={activeDot('var(--success)')} name="Collection" />
+                <Area type="monotone" dataKey="primary" stroke="var(--info)" strokeWidth={2} strokeDasharray="6 3" fill="url(#gradPrimary)" dot={false} activeDot={activeDot('var(--info)')} name="Primary" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
           <div className="section-label">Outstanding:Primary by Distributor</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 210, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={l2Outstanding} layout="vertical" margin={{ top: 5, right: 40, left: 100, bottom: 5 }}>
+              <BarChart data={l2Outstanding} layout="vertical" margin={{ top: 5, right: 44, left: 100, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 4" stroke="var(--border)" strokeOpacity={0.45} horizontal={false} />
                 <XAxis type="number" domain={[0, 60]} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} />
                 <YAxis type="category" dataKey="name" tick={{ fill: 'var(--text-secondary)', fontSize: 9 }} axisLine={false} tickLine={false} width={95} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Outstanding:Primary']} />
-                <ReferenceLine x={30} stroke="var(--warning)" strokeDasharray="3 3" label={{ value: 'Threshold', position: 'top', fill: 'var(--warning)', fontSize: 10 }} />
-                <Bar dataKey="outstanding_vs_primary" radius={3}>
+                <ReferenceLine x={30} stroke="var(--warning)" strokeDasharray="4 3" label={{ value: 'Threshold 30%', position: 'insideTopRight', fill: 'var(--warning)', fontSize: 10 }} />
+                <Bar dataKey="outstanding_vs_primary" radius={5} maxBarSize={16}>
                   {l2Outstanding.map((d, i) => (
                     <Cell key={i} fill={d.outstanding_vs_primary > 40 ? 'var(--critical)' : d.outstanding_vs_primary > 30 ? 'var(--warning)' : 'var(--success)'} />
                   ))}

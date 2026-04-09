@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell, CartesianGrid, Legend } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Territory, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const mauTrend = [
   { month: 'Oct', mau: 86, pjp: 79 }, { month: 'Nov', mau: 84, pjp: 77 },
@@ -37,7 +38,6 @@ const tableColumns = [
   { key: 'beat_revenue_vs_design', label: 'vs Design', format: v => <span style={{ color: v < -15 ? 'var(--critical)' : v < 0 ? 'var(--warning)' : 'var(--success)' }}>{v > 0 ? '+' : ''}{v}%</span> },
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S05Territory() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -65,30 +65,37 @@ export default function S05Territory() {
 
       <div className="two-col">
         <div>
-          <div className="section-label">MAU & PJP MAU Trend — 6 Months</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className="section-label">MAU &amp; PJP MAU Trend — 6 Months</div>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={mauTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[55, 95]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={mauTrend} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
+                <defs>
+                  <GradFill id="gradMau" color="var(--accent)" startOpacity={0.25} />
+                  <GradFill id="gradPjp" color="var(--info)" startOpacity={0.2} />
+                </defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis domain={[55, 95]} {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, '']} />
-                <ReferenceLine y={80} stroke="var(--border-light)" strokeDasharray="3 3" />
-                <Line type="monotone" dataKey="mau" stroke="var(--accent)" strokeWidth={2} dot={{ r: 3, fill: 'var(--accent)' }} name="MAU" />
-                <Line type="monotone" dataKey="pjp" stroke="var(--info)" strokeWidth={2} dot={{ r: 3, fill: 'var(--info)' }} name="PJP MAU" />
-              </LineChart>
+                <Legend wrapperStyle={legendWrapperStyle} iconType="circle" iconSize={8} />
+                <ReferenceLine y={80} stroke="var(--border-light)" strokeDasharray="4 3" />
+                <Area type="monotone" dataKey="mau" stroke="var(--accent)" strokeWidth={2.5} fill="url(#gradMau)" dot={{ r: 3.5, fill: 'var(--accent)', strokeWidth: 0 }} activeDot={activeDot('var(--accent)')} name="MAU" />
+                <Area type="monotone" dataKey="pjp" stroke="var(--info)" strokeWidth={2.5} fill="url(#gradPjp)" dot={{ r: 3.5, fill: 'var(--info)', strokeWidth: 0 }} activeDot={activeDot('var(--info)')} name="PJP MAU" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
-          <div className="section-label">Beat Compliance vs Design</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className="section-label">Beat Compliance vs Target</div>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={l2Territory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="beat_name" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <BarChart data={l2Territory} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="beat_name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
+                <YAxis {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Compliance']} />
-                <ReferenceLine y={84} stroke="var(--success)" strokeDasharray="3 3" label={{ value: 'Target', position: 'top', fill: 'var(--success)', fontSize: 10 }} />
-                <Bar dataKey="visit_compliance" radius={3}>
+                <ReferenceLine y={84} stroke="var(--success)" strokeDasharray="4 3" label={{ value: 'Target 84%', position: 'insideTopRight', fill: 'var(--success)', fontSize: 10 }} />
+                <Bar dataKey="visit_compliance" radius={6} maxBarSize={32}>
                   {l2Territory.map((d, i) => (
                     <Cell key={i} fill={d.visit_compliance < 60 ? 'var(--critical)' : d.visit_compliance < 75 ? 'var(--warning)' : 'var(--success)'} />
                   ))}

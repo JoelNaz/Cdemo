@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine, CartesianGrid, Legend } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Extraction, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const extractionTrend = [
   { month: 'Oct', wsp: 3840, bench: 5200 }, { month: 'Nov', wsp: 3720, bench: 5200 },
@@ -37,7 +38,6 @@ const tableColumns = [
   }},
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S02Extraction() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -66,28 +66,35 @@ export default function S02Extraction() {
       <div className="two-col">
         <div>
           <div className="section-label">WSP/Outlet vs Benchmark Trend</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={extractionTrend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={extractionTrend} margin={{ top: 12, right: 12, left: -10, bottom: 0 }}>
+                <defs>
+                  <GradFill id="gradWsp" color="var(--critical)" startOpacity={0.25} />
+                  <GradFill id="gradBench" color="var(--success)" startOpacity={0.15} />
+                </defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis {...yAxisProps} tickFormatter={v => `₹${(v / 1000).toFixed(0)}k`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`₹${v.toLocaleString()}`, '']} />
-                <Line type="monotone" dataKey="wsp" stroke="var(--critical)" strokeWidth={2} dot={{ r: 3, fill: 'var(--critical)' }} name="WSP/Outlet" />
-                <Line type="monotone" dataKey="bench" stroke="var(--success)" strokeWidth={2} strokeDasharray="5 5" dot={false} name="Benchmark" />
-              </LineChart>
+                <Legend wrapperStyle={legendWrapperStyle} iconType="circle" iconSize={8} />
+                <Area type="monotone" dataKey="wsp" stroke="var(--critical)" strokeWidth={2.5} fill="url(#gradWsp)" dot={{ r: 3.5, fill: 'var(--critical)', strokeWidth: 0 }} activeDot={activeDot('var(--critical)')} name="WSP/Outlet" />
+                <Area type="monotone" dataKey="bench" stroke="var(--success)" strokeWidth={2} strokeDasharray="6 3" fill="url(#gradBench)" dot={false} activeDot={activeDot('var(--success)')} name="Benchmark" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
-          <div className="section-label">Extraction Gap by District</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className="section-label">Extraction Rate by District</div>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={l2Extraction.slice(0, 6)} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="district" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <BarChart data={l2Extraction.slice(0, 6)} margin={{ top: 12, right: 12, left: -10, bottom: 0 }}>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="district" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                <YAxis {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v.toFixed(1)}%`, 'Extraction Rate']} />
-                <ReferenceLine y={73.8} stroke="var(--success)" strokeDasharray="3 3" label={{ value: 'Benchmark', position: 'top', fill: 'var(--success)', fontSize: 10 }} />
-                <Bar dataKey="extraction_rate" radius={4}>
+                <ReferenceLine y={73.8} stroke="var(--success)" strokeDasharray="4 3" label={{ value: 'Benchmark 73.8%', position: 'insideTopRight', fill: 'var(--success)', fontSize: 10 }} />
+                <Bar dataKey="extraction_rate" radius={6} maxBarSize={36}>
                   {l2Extraction.slice(0, 6).map((d, i) => (
                     <Cell key={i} fill={d.extraction_rate < 50 ? 'var(--critical)' : d.extraction_rate < 65 ? 'var(--warning)' : 'var(--success)'} />
                   ))}

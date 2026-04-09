@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { useEffect, useState, useCallback } from 'react';
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Sector, CartesianGrid } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2ChannelMix, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, legendWrapperStyle, chartCardClass, chartCardStyle } from '../utils/chartUtils';
 
 const channelTrend = [
   { q: 'Q2 FY25', gt: 78, mt: 12, qc: 7, ecomm: 3 },
@@ -44,10 +45,23 @@ const tableColumns = [
   },
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
+
+function ActivePieShape(props) {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, value } = props;
+  return (
+    <g>
+      <text x={cx} y={cy - 10} textAnchor="middle" fill="var(--text-primary)" fontSize={22} fontWeight={800} fontFamily="Outfit, sans-serif">{value}%</text>
+      <text x={cx} y={cy + 14} textAnchor="middle" fill="var(--text-muted)" fontSize={10} fontWeight={600} letterSpacing={0.8} textTransform="uppercase">{payload.name}</text>
+      <Sector cx={cx} cy={cy} innerRadius={innerRadius} outerRadius={outerRadius + 6} startAngle={startAngle} endAngle={endAngle} fill={fill} />
+      <Sector cx={cx} cy={cy} innerRadius={outerRadius + 10} outerRadius={outerRadius + 13} startAngle={startAngle} endAngle={endAngle} fill={fill} opacity={0.5} />
+    </g>
+  );
+}
 
 export default function S04Channel() {
   const { trackScreenVisit, setChatOpen } = useApp();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const onPieEnter = useCallback((_, index) => setActiveIndex(index), []);
   useEffect(() => { trackScreenVisit('S-04'); }, []);
 
   return (
@@ -73,30 +87,43 @@ export default function S04Channel() {
       <div className="two-col">
         <div>
           <div className="section-label">Current Channel Mix</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px] flex items-center justify-center" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={pieData} cx="40%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" paddingAngle={3}>
-                  {pieData.map((d, i) => <Cell key={i} fill={d.color} />)}
+                <Pie
+                  data={pieData}
+                  cx="42%"
+                  cy="50%"
+                  innerRadius={62}
+                  outerRadius={92}
+                  dataKey="value"
+                  paddingAngle={3}
+                  activeIndex={activeIndex}
+                  activeShape={ActivePieShape}
+                  onMouseEnter={onPieEnter}
+                >
+                  {pieData.map((d, i) => <Cell key={i} fill={d.color} opacity={i === activeIndex ? 1 : 0.7} />)}
                 </Pie>
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, '']} />
-                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, color: 'var(--text-secondary)' }} />
+                <Legend iconType="circle" iconSize={8} wrapperStyle={legendWrapperStyle} layout="vertical" align="right" verticalAlign="middle" />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
           <div className="section-label">Channel Share Trend — Quarterly</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={channelTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="q" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={ttStyle} />
+              <BarChart data={channelTrend} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="q" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                <YAxis {...yAxisProps} tickFormatter={v => `${v}%`} />
+                <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, '']} />
+                <Legend wrapperStyle={legendWrapperStyle} iconType="circle" iconSize={8} />
                 <Bar dataKey="gt" stackId="a" fill="var(--accent)" name="GT" />
                 <Bar dataKey="mt" stackId="a" fill="var(--info)" name="MT" />
                 <Bar dataKey="qc" stackId="a" fill="var(--success)" name="QC" />
-                <Bar dataKey="ecomm" stackId="a" fill="var(--warning)" name="Ecomm" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="ecomm" stackId="a" fill="var(--warning)" name="Ecomm" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

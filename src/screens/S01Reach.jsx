@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid, LabelList } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Reach, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const ndTrend = [
   { month: 'Oct', nd: 47.1 }, { month: 'Nov', nd: 46.3 }, { month: 'Dec', nd: 45.8 },
@@ -44,7 +45,6 @@ const highlightRules = {
   outlet_churn: { highlight: v => v > 50 },
 };
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S01Reach() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -73,29 +73,33 @@ export default function S01Reach() {
       <div className="two-col">
         <div>
           <div className="section-label">ND% Trend — 6 Months</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={ndTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[38, 50]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={ndTrend} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
+                <defs><GradFill id="gradNd" color="var(--critical)" startOpacity={0.25} /></defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis domain={[38, 50]} {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'ND%']} />
-                <Line type="monotone" dataKey="nd" stroke="var(--critical)" strokeWidth={2} dot={{ fill: 'var(--critical)', r: 3 }} />
-              </LineChart>
+                <Area type="monotone" dataKey="nd" stroke="var(--critical)" strokeWidth={2.5} fill="url(#gradNd)" dot={{ fill: 'var(--critical)', r: 3.5, strokeWidth: 0 }} activeDot={activeDot('var(--critical)')} name="ND%" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
           <div className="section-label">Outlet Funnel</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={outletFunnel} layout="vertical" margin={{ top: 5, right: 40, left: 60, bottom: 5 }}>
+              <BarChart data={outletFunnel} layout="vertical" margin={{ top: 5, right: 56, left: 60, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 4" stroke="var(--border)" strokeOpacity={0.4} horizontal={false} />
                 <XAxis type="number" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <YAxis type="category" dataKey="stage" tick={{ fill: 'var(--text-secondary)', fontSize: 10 }} axisLine={false} tickLine={false} width={70} />
                 <Tooltip contentStyle={ttStyle} />
-                <Bar dataKey="count" radius={3}>
+                <Bar dataKey="count" radius={5} maxBarSize={18}>
                   {outletFunnel.map((_, i) => (
                     <Cell key={i} fill={i === 0 ? 'var(--border-light)' : i < 3 ? 'var(--info)' : i < 5 ? 'var(--accent)' : 'var(--success)'} />
                   ))}
+                  <LabelList dataKey="count" position="right" style={{ fill: 'var(--text-muted)', fontSize: 10 }} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine, CartesianGrid, LabelList } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Promo, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, chartCardClass, chartCardStyle } from '../utils/chartUtils';
 
 const waterfallData = [
   { name: 'Baseline', value: 4200000, fill: 'var(--info)' },
@@ -35,7 +36,6 @@ const tableColumns = [
   { key: 'eligible_outlets', label: 'Eligible' },
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S06Promo() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -64,14 +64,16 @@ export default function S06Promo() {
       <div className="two-col">
         <div>
           <div className="section-label">Uplift Waterfall — Rural Penetration Scheme</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={waterfallData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="name" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `₹${(Math.abs(v) / 100000).toFixed(1)}L`} />
+              <BarChart data={waterfallData} margin={{ top: 24, right: 12, left: -10, bottom: 0 }}>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} />
+                <YAxis {...yAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickFormatter={v => `₹${(Math.abs(v) / 100000).toFixed(1)}L`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`₹${(Math.abs(v) / 100000).toFixed(1)}L`, '']} />
-                <Bar dataKey="value" radius={3}>
+                <Bar dataKey="value" radius={6} maxBarSize={52}>
                   {waterfallData.map((d, i) => <Cell key={i} fill={d.fill} />)}
+                  <LabelList dataKey="value" position="top" style={{ fill: 'var(--text-secondary)', fontSize: 10 }} formatter={v => `₹${(Math.abs(v) / 100000).toFixed(1)}L`} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -79,17 +81,19 @@ export default function S06Promo() {
         </div>
         <div>
           <div className="section-label">Participation Rate by Scheme</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={l2Promo} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="scheme_name" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[0, 100]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <BarChart data={l2Promo} margin={{ top: 24, right: 12, left: -10, bottom: 0 }}>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="scheme_name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
+                <YAxis domain={[0, 100]} {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'Participation']} />
-                <ReferenceLine y={60} stroke="var(--success)" strokeDasharray="3 3" label={{ value: 'Target 60%', position: 'top', fill: 'var(--success)', fontSize: 10 }} />
-                <Bar dataKey="participation_rate" radius={3}>
+                <ReferenceLine y={60} stroke="var(--success)" strokeDasharray="4 3" label={{ value: 'Target 60%', position: 'insideTopRight', fill: 'var(--success)', fontSize: 10 }} />
+                <Bar dataKey="participation_rate" radius={6} maxBarSize={40}>
                   {l2Promo.map((d, i) => (
                     <Cell key={i} fill={d.participation_rate < 35 ? 'var(--critical)' : d.participation_rate < 50 ? 'var(--warning)' : 'var(--success)'} />
                   ))}
+                  <LabelList dataKey="participation_rate" position="top" style={{ fill: 'var(--text-secondary)', fontSize: 10 }} formatter={v => `${v}%`} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

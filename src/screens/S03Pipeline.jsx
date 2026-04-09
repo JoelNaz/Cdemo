@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { LineChart, Line, ScatterChart, Scatter, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts';
+import { AreaChart, Area, ScatterChart, Scatter, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid, Cell } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Pipeline, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const secPriTrend = [
   { month: 'Oct', ratio: 0.87 }, { month: 'Nov', ratio: 0.84 }, { month: 'Dec', ratio: 0.80 },
@@ -35,7 +36,6 @@ const tableColumns = [
   { key: 'saly_secondary', label: 'SALY Sec', format: v => <span style={{ color: v < 0 ? 'var(--critical)' : 'var(--success)' }}>{v > 0 ? '+' : ''}{v}%</span> },
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S03Pipeline() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -64,29 +64,35 @@ export default function S03Pipeline() {
       <div className="two-col">
         <div>
           <div className="section-label">Sec:Pri Trend — 6 Months</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={secPriTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[0.5, 1.0]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={secPriTrend} margin={{ top: 12, right: 12, left: -20, bottom: 0 }}>
+                <defs><GradFill id="gradRatio" color="var(--warning)" startOpacity={0.28} /></defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis domain={[0.5, 1.0]} {...yAxisProps} tickFormatter={v => v.toFixed(2)} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [v.toFixed(2), 'Sec:Pri']} />
-                <ReferenceLine y={0.60} stroke="var(--critical)" strokeDasharray="4 4" label={{ value: 'Threshold 0.60', position: 'right', fill: 'var(--critical)', fontSize: 10 }} />
-                <Line type="monotone" dataKey="ratio" stroke="var(--warning)" strokeWidth={2} dot={{ fill: 'var(--warning)', r: 3 }} />
-              </LineChart>
+                <ReferenceLine y={0.60} stroke="var(--critical)" strokeDasharray="4 4" label={{ value: 'Threshold 0.60', position: 'insideTopRight', fill: 'var(--critical)', fontSize: 10 }} />
+                <Area type="monotone" dataKey="ratio" stroke="var(--warning)" strokeWidth={2.5} fill="url(#gradRatio)" dot={{ fill: 'var(--warning)', r: 3.5, strokeWidth: 0 }} activeDot={activeDot('var(--warning)')} name="Sec:Pri" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
           <div className="section-label">Primary vs Secondary — Stuffing Detection</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                <CartesianGrid stroke="var(--border)" strokeOpacity={0.3} />
-                <XAxis dataKey="primary_value" name="Primary ₹" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickFormatter={v => `₹${(v / 100000).toFixed(0)}L`} axisLine={false} tickLine={false} label={{ value: 'Primary →', position: 'insideBottom', offset: -2, fill: 'var(--text-muted)', fontSize: 10 }} />
+              <ScatterChart margin={{ top: 12, right: 20, left: -10, bottom: 16 }}>
+                <CartesianGrid strokeDasharray="3 4" stroke="var(--border)" strokeOpacity={0.45} />
+                <XAxis dataKey="primary_value" name="Primary ₹" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickFormatter={v => `₹${(v / 100000).toFixed(0)}L`} axisLine={false} tickLine={false} label={{ value: 'Primary →', position: 'insideBottom', offset: -4, fill: 'var(--text-muted)', fontSize: 10 }} />
                 <YAxis dataKey="pipeline_ratio" name="Sec:Pri" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={ttStyle} cursor={{ strokeDasharray: '3 3' }} formatter={(v, name) => [name === 'Sec:Pri' ? v.toFixed(2) : `₹${(v / 100000).toFixed(1)}L`, name]} />
-                <ReferenceLine y={0.60} stroke="var(--critical)" strokeDasharray="3 3" />
-                <Scatter data={l2Pipeline} fill="var(--accent)" opacity={0.8} />
+                <ReferenceLine y={0.60} stroke="var(--critical)" strokeDasharray="4 3" label={{ value: 'Threshold', position: 'insideTopRight', fill: 'var(--critical)', fontSize: 10 }} />
+                <Scatter data={l2Pipeline} shape={(props) => {
+                  const { cx, cy, payload } = props;
+                  const isRisk = payload.pipeline_ratio < 0.60;
+                  return <circle cx={cx} cy={cy} r={isRisk ? 7 : 5} fill={isRisk ? 'var(--critical)' : 'var(--accent)'} opacity={0.85} stroke={isRisk ? 'var(--critical)' : 'transparent'} strokeWidth={1} strokeOpacity={0.4} />;
+                }} />
               </ScatterChart>
             </ResponsiveContainer>
           </div>

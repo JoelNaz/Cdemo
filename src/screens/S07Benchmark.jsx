@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Cell, CartesianGrid, Legend, LabelList } from 'recharts';
 import KpiStrip from '../components/KpiStrip';
 import FindingCard from '../components/FindingCard';
 import DataTable from '../components/DataTable';
 import { l2Benchmark, driftFindings } from '../data/mockData';
 import { useApp } from '../context/AppContext';
+import { ttStyle, CHART_HEIGHT, gridProps, xAxisProps, yAxisProps, activeDot, legendWrapperStyle, chartCardClass, chartCardStyle, GradFill } from '../utils/chartUtils';
 
 const gapTrend = [
   { month: 'Oct', nd_gap: -5.2, ext_gap: -8.0 }, { month: 'Nov', nd_gap: -6.1, ext_gap: -8.9 },
@@ -41,7 +42,6 @@ const tableColumns = [
   { key: 'trend_3m', label: 'Trend', format: v => <span style={{ color: v === 'widening' ? 'var(--critical)' : v === 'stable' ? 'var(--warning)' : 'var(--success)' }}>{v}</span> },
 ];
 
-const ttStyle = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text-primary)', fontSize: 12 };
 
 export default function S07Benchmark() {
   const { trackScreenVisit, setChatOpen } = useApp();
@@ -70,31 +70,39 @@ export default function S07Benchmark() {
       <div className="two-col">
         <div>
           <div className="section-label">Gap to Cohort Median — Widening Trend</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={gapTrend} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <AreaChart data={gapTrend} margin={{ top: 12, right: 12, left: -10, bottom: 0 }}>
+                <defs>
+                  <GradFill id="gradNdGap" color="var(--critical)" startOpacity={0.22} />
+                  <GradFill id="gradExtGap" color="var(--warning)" startOpacity={0.18} />
+                </defs>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="month" {...xAxisProps} />
+                <YAxis {...yAxisProps} tickFormatter={v => `${v}pp`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}pp`, '']} />
-                <ReferenceLine y={0} stroke="var(--border)" />
-                <Line type="monotone" dataKey="nd_gap" stroke="var(--critical)" strokeWidth={2} dot={{ r: 3, fill: 'var(--critical)' }} name="ND% Gap" />
-                <Line type="monotone" dataKey="ext_gap" stroke="var(--warning)" strokeWidth={2} dot={{ r: 3, fill: 'var(--warning)' }} name="Extraction Gap" />
-              </LineChart>
+                <Legend wrapperStyle={legendWrapperStyle} iconType="circle" iconSize={8} />
+                <ReferenceLine y={0} stroke="var(--border-light)" strokeWidth={1.5} />
+                <Area type="monotone" dataKey="nd_gap" stroke="var(--critical)" strokeWidth={2.5} fill="url(#gradNdGap)" dot={{ r: 3.5, fill: 'var(--critical)', strokeWidth: 0 }} activeDot={activeDot('var(--critical)')} name="ND% Gap" />
+                <Area type="monotone" dataKey="ext_gap" stroke="var(--warning)" strokeWidth={2.5} fill="url(#gradExtGap)" dot={{ r: 3.5, fill: 'var(--warning)', strokeWidth: 0 }} activeDot={activeDot('var(--warning)')} name="Extraction Gap" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
         <div>
-          <div className="section-label">Cohort Percentile Position</div>
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-[18px]" style={{ height: 200, boxShadow: 'var(--card-shadow)' }}>
+          <div className="section-label">Cohort Percentile Position — ND%</div>
+          <div className={chartCardClass} style={chartCardStyle(CHART_HEIGHT)}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={cohortBar} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <XAxis dataKey="name" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[30, 65]} tick={{ fill: 'var(--text-muted)', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <BarChart data={cohortBar} margin={{ top: 24, right: 12, left: -10, bottom: 0 }}>
+                <CartesianGrid {...gridProps} />
+                <XAxis dataKey="name" {...xAxisProps} tick={{ fill: 'var(--text-muted)', fontSize: 9 }} />
+                <YAxis domain={[30, 65]} {...yAxisProps} tickFormatter={v => `${v}%`} />
                 <Tooltip contentStyle={ttStyle} formatter={v => [`${v}%`, 'ND%']} />
-                <Bar dataKey="nd" radius={3}>
+                <Bar dataKey="nd" radius={6} maxBarSize={44}>
                   {cohortBar.map((d, i) => (
-                    <Cell key={i} fill={d.name === 'North-2' ? 'var(--critical)' : 'var(--border-light)'} />
+                    <Cell key={i} fill={d.name === 'North-2' ? 'var(--critical)' : 'var(--border-light)'} opacity={d.name === 'North-2' ? 1 : 0.75} />
                   ))}
+                  <LabelList dataKey="nd" position="top" style={{ fill: 'var(--text-secondary)', fontSize: 10 }} formatter={v => `${v}%`} />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
