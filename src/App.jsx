@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import Sidebar from './components/Sidebar';
 import ChatBot from './components/ChatBot';
+import ContextAction from './components/ContextAction';
 import './index.css';
 
 const S00Landing   = lazy(() => import('./screens/S00Landing'));
@@ -59,6 +60,7 @@ function AppLayout() {
         </Suspense>
       </main>
       <ChatBot />
+      <ContextAction />
     </div>
   );
 }
