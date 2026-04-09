@@ -95,9 +95,9 @@ export default function S00Landing() {
         <span className="section-hint">Click any finding to drill down</span>
       </div>
       <div className="flex flex-col gap-2">
-        {criticalFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
-        {warningFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
-        {infoFindings.map(f => <FindingCard key={f.finding_id} finding={f} />)}
+        {criticalFindings.map(f => <FindingCard key={f.finding_id} finding={f} showDrill={true} />)}
+        {warningFindings.map(f => <FindingCard key={f.finding_id} finding={f} showDrill={true} />)}
+        {infoFindings.map(f => <FindingCard key={f.finding_id} finding={f} showDrill={true} />)}
       </div>
     </div>
   );

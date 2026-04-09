@@ -18,7 +18,7 @@ const severityStyles = {
   },
 };
 
-export default function FindingCard({ finding }) {
+export default function FindingCard({ finding, showDrill = false }) {
   const navigate = useNavigate();
   const { trackScreenVisit } = useApp();
   const screen = screenDefinitions[finding.target_screen];
@@ -81,7 +81,7 @@ export default function FindingCard({ finding }) {
         </span>
       </div>
 
-      {screen && (
+      {showDrill && screen && (
         <div className="inline-flex items-center gap-1 mt-[9px] px-2.5 py-1 bg-[var(--bg-tertiary)] border border-[var(--border)] rounded-md text-[10.5px] font-semibold text-[var(--text-secondary)] cursor-pointer transition-[border-color,color,background] hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[var(--accent-light)] tracking-[0.1px]">
           Drill down: {screen.name} <ArrowRight size={12} />
         </div>
